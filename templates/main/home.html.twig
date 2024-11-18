@@ -1,7 +1,54 @@
-{%  extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Hello World</h1>
+    <div>
+        <p>
+            Date du jour : {{ "now"|date("Y-m-d") }}<br>
+            Participant :
+        </p>
+    </div>
+    <div>
+        <h4>Filtrer les sorties</h4>
+        <!--  Créer un form
+        {#
+        {{ form_start(filterForm) }}
+        {{ form_widget(filterForm) }}
+        {{ form_end(filterForm) }}
+        #}
+-->
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Nom de la sortie</th>
+            <th scope="col">Date de la sortie</th>
+            <th scope="col">Clotûre</th>
+            <th scope="col">Inscrits/places</th>
+            <th scope="col">Etat</th>
+            <th scope="col">Inscrits</th>
+            <th scope="col">Organisateur</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--Faire une boucle pour tous les champs en recuperant les données -->
+        <tr>
+            <th scope="row">nomSortie</th>
+            <td>La date</td>
+            <td>date de cloture</td>
+            <td>@nb d'inscrit et de place</td>
+            <td>l'état</td>
+            <td>Si oui X</td>
+            <td>Organisateur ?</td>
+            <td>Afficher - se desister</td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <a href="/" class="btn btn-secondary">Créer une sortie</a>
+    </div>
+
+
 {% endblock %}
 
 {% block title %} ENI | Accueil {% endblock %}
