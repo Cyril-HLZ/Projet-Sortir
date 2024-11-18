@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
@@ -33,6 +35,28 @@ class Participant
 
     #[ORM\Column(nullable: true)]
     private ?bool $actif = null;
+
+    #[ORM\ManyToOne(inversedBy: 'participants')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
+
+    /**
+     * @var Collection<int, Sortie>
+     */
+    #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
+    private Collection $sorties;
+
+    /**
+     * @var Collection<int, Sortie>
+     */
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur')]
+    private Collection $organisateur;
+
+    public function __construct()
+    {
+        $this->sorties = new ArrayCollection();
+        $this->organisateur = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +143,72 @@ class Participant
     public function setActif(?bool $actif): static
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): static
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties->add($sorty);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): static
+    {
+        $this->sorties->removeElement($sorty);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getOrganisateur(): Collection
+    {
+        return $this->organisateur;
+    }
+
+    public function addOrganisateur(Sortie $organisateur): static
+    {
+        if (!$this->organisateur->contains($organisateur)) {
+            $this->organisateur->add($organisateur);
+            $organisateur->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganisateur(Sortie $organisateur): static
+    {
+        if ($this->organisateur->removeElement($organisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($organisateur->getOrganisateur() === $this) {
+                $organisateur->setOrganisateur(null);
+            }
+        }
 
         return $this;
     }
