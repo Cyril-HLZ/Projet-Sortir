@@ -37,7 +37,11 @@
             <td>La date</td>
             <td>date de cloture</td>
             <td>@nb d'inscrit et de place</td>
-            <td>l'état</td>
+            <td>
+                {% for etat in etats %}
+                    {{ etat.libelle }}
+                {% endfor %}
+            </td>
             <td>Si oui X</td>
             <td>Organisateur ?</td>
             <td>Afficher - se desister</td>
