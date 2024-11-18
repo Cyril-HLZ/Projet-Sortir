@@ -21,5 +21,6 @@ class CampusFixtures extends Fixture
             $this->addReference("campus".$campusName, $campus);
             $manager->persist($campus);
         }
+        $manager->flush();
     }
 }

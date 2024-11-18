@@ -18,10 +18,12 @@ class EtatFixtures extends Fixture
             "Passée",
             "Annulée"
         ];
-        foreach ($libelleNames as $libelleName) {
+        foreach ($libelleNames as $i => $libelleName) {
             $etat = new Etat();
             $etat->setLibelle($libelleName);
             $manager->persist($etat);
+            $this->addReference('etat'.$i, $etat);
+
         }
 
         $manager->flush();

@@ -31,21 +31,27 @@
         </tr>
         </thead>
         <tbody>
-        <!--Faire une boucle pour tous les champs en recuperant les données -->
-        <tr>
-            <th scope="row">nomSortie</th>
-            <td>La date</td>
-            <td>date de cloture</td>
-            <td>@nb d'inscrit et de place</td>
-            <td>
-                {% for etat in etats %}
-                    {{ etat.libelle }}
-                {% endfor %}
-            </td>
-            <td>Si oui X</td>
-            <td>Organisateur ?</td>
-            <td>Afficher - se desister</td>
-        </tr>
+        {% for sortie in sorties %}
+            <tr>
+                <th scope="row">{{ sortie.nom }}</th>
+                <td>{{ sortie.dateHeureDebut|date('Y-m-d H:i') }}</td>
+                <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i') }}</td>
+                <td>{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
+                <td> {#{{ sortie.etat.libelle }} #} </td>
+                <td>{% if app.user in sortie.participants %}X{% endif %}</td>
+                <td>{{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</td>
+                <td>
+                    <a href="{{ path('main_home') }}">Afficher</a>
+                    {% if app.user in sortie.participants %}
+                        <a href="{{ path('main_home') }}">Se désister</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="text-center">Aucune sortie trouvée</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
     <div>

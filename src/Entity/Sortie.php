@@ -47,7 +47,7 @@ class Sortie
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     private ?Etat $etat = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'sorties')]
     private ?Campus $campus = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]

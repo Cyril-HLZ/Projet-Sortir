@@ -21,7 +21,7 @@ class Participant
     #[ORM\Column(length: 180)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
@@ -36,7 +36,7 @@ class Participant
     #[ORM\Column(nullable: true)]
     private ?bool $actif = null;
 
-    #[ORM\ManyToOne(inversedBy: 'participants')]
+    #[ORM\ManyToOne(cascade: ['persist']  ,inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $campus = null;
 
