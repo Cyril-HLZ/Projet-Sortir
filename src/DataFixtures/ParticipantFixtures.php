@@ -6,9 +6,17 @@ use App\Entity\Participant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 
 class ParticipantFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function __construct(
+        private readOnly UserPasswordHasherInterface $passwordHasher,
+    )
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = \Faker\Factory::create('fr_FR');
@@ -19,7 +27,7 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
             $participant->setPrenom($faker->firstName);
             $participant->setTelephone($faker->phoneNumber);
             $participant->setMail($faker->email);
-            $participant->setPassword('password');
+            $participant->setPassword($this->passwordHasher->hashPassword($participant, "PLANNER"));
             $participant->setAdministrateur(false);
             $participant->setActif(true);
 

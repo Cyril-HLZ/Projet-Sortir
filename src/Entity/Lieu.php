@@ -102,22 +102,22 @@ class Lieu
         return $this->sorties;
     }
 
-    public function addSorty(Sortie $sorty): static
+    public function addSortie(Sortie $sorties): static
     {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties->add($sorty);
-            $sorty->setLieu($this);
+        if (!$this->sorties->contains($sorties)) {
+            $this->sorties->add($sorties);
+            $sorties->setLieu($this);
         }
 
         return $this;
     }
 
-    public function removeSorty(Sortie $sorty): static
+    public function removeSortie(Sortie $sorties): static
     {
-        if ($this->sorties->removeElement($sorty)) {
+        if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
-            if ($sorty->getLieu() === $this) {
-                $sorty->setLieu(null);
+            if ($sorties->getLieu() === $this) {
+                $sorties->setLieu(null);
             }
         }
 

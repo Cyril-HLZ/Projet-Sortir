@@ -6,9 +6,11 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-class Participant
+class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,7 +30,7 @@ class Participant
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $motPasse = null;
+    private ?string $password = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $administrateur = null;
@@ -111,14 +113,14 @@ class Participant
         return $this;
     }
 
-    public function getMotPasse(): ?string
+    public function getPassword(): ?string
     {
-        return $this->motPasse;
+        return $this->password;
     }
 
-    public function setMotPasse(string $motPasse): static
+    public function setPassword(string $password): static
     {
-        $this->motPasse = $motPasse;
+        $this->password = $password;
 
         return $this;
     }
@@ -167,18 +169,18 @@ class Participant
         return $this->sorties;
     }
 
-    public function addSorty(Sortie $sorty): static
+    public function addSortie(Sortie $sorties): static
     {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties->add($sorty);
+        if (!$this->sorties->contains($sorties)) {
+            $this->sorties->add($sorties);
         }
 
         return $this;
     }
 
-    public function removeSorty(Sortie $sorty): static
+    public function removeSortie(Sortie $sorties): static
     {
-        $this->sorties->removeElement($sorty);
+        $this->sorties->removeElement($sorties);
 
         return $this;
     }
@@ -211,5 +213,23 @@ class Participant
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->administrateur ? ['ROLE_ADMIN'] : ['ROLE_USER'];
+
+        return array_unique($roles);
+    }
+
+
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->mail;
     }
 }
