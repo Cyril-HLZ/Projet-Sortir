@@ -28,7 +28,7 @@ class Participant
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private ?string $motPasse = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $administrateur = null;
@@ -36,7 +36,7 @@ class Participant
     #[ORM\Column(nullable: true)]
     private ?bool $actif = null;
 
-    #[ORM\ManyToOne(cascade: ['persist']  ,inversedBy: 'participants')]
+    #[ORM\ManyToOne(inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $campus = null;
 
@@ -111,14 +111,14 @@ class Participant
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getMotPasse(): ?string
     {
-        return $this->password;
+        return $this->motPasse;
     }
 
-    public function setPassword(string $password): self
+    public function setMotPasse(string $motPasse): static
     {
-        $this->password = $password;
+        $this->motPasse = $motPasse;
 
         return $this;
     }

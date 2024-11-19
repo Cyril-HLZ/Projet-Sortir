@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MainController extends AbstractController
 {
-    #[Route('/', name: 'main_home', methods: ['GET'])]
+    #[Route('/home', name: 'main_home', methods: ['GET'])]
     public function home(EntityManagerInterface $entityManager): Response
     {
 
