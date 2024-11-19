@@ -28,7 +28,7 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
             $participant->setTelephone($faker->phoneNumber);
             $participant->setMail($faker->email);
             $participant->setPassword($this->passwordHasher->hashPassword($participant, "PLANNER"));
-            $participant->setAdministrateur(false);
+            $participant->setAdministrateur($faker->boolean);
             $participant->setActif(true);
 
             // Attribution aléatoire d'un campus

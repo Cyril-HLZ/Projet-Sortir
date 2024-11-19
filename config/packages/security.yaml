@@ -37,6 +37,10 @@ security:
          - { path: ^/inscription, roles: IS_AUTHENTICATED_ANONYMOUSLY } #Accès public
         # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY } #Accès public
          - { path: ^/home, roles: ROLE_USER} #Accès pour les utilisateurs connectés
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
 when@test:
     security:
         password_hashers:
