@@ -16,6 +16,59 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+    public function findByFilter(array $criteria, $user)
+    {
+
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.campus', 'c')
+            ->leftJoin('s.organisateur', 'o')
+            ->leftJoin('s.participants', 'p');
+
+        if (!empty($criteria['campus'])) {
+            $qb->andWhere('s.campus = :campus')
+                ->setParameter('campus', $criteria['campus']);
+        }
+
+        if (!empty($criteria['search'])) {
+            $qb->andWhere('s.nom LIKE :search')
+                ->setParameter('search', '%' . $criteria['search'] . '%');
+        }
+
+        if (!empty($criteria['dateMin'])) {
+            $qb->andWhere('s.dateHeureDebut >= :dateMin')
+                ->setParameter('dateMin', $criteria['dateMin']);
+        }
+
+        if (!empty($criteria['dateMax'])) {
+            $qb->andWhere('s.dateHeureDebut <= :dateMax')
+                ->setParameter('dateMax', $criteria['dateMax']);
+        }
+
+        if (!empty($criteria['isOrganizer'])) {
+            $qb->andWhere('o = :user')
+                ->setParameter('user', $user);
+        }
+
+        if (!empty($criteria['isRegistered'])) {
+            $qb->andWhere(':user MEMBER OF s.participants')
+                ->setParameter('user', $user);
+        }
+
+        if (!empty($criteria['isNotRegistered'])) {
+            $qb->andWhere(':user NOT MEMBER OF s.participants')
+                ->setParameter('user', $user);
+        }
+
+        if (!empty($criteria['isPast'])) {
+            $qb->join('s.etat', 'e')
+                ->andWhere('e.libelle = :etatPasse')
+                ->setParameter('etatPasse', 'Passée');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     //    /**
     //     * @return Sortie[] Returns an array of Sortie objects
     //     */

@@ -1,21 +1,23 @@
 {% extends 'base.html.twig' %}
 
+
+
 {% block body %}
     <div>
         <p>
-            Date du jour : {{ "now"|date("Y-m-d") }}<br>
-            Participant :
+            Date du jour : {{ "now"|format_date('long', locale='fr') }}<br>
+            Participant : {{ app.user.prenom }} {{ app.user.nom }}
         </p>
     </div>
     <div>
         <h4>Filtrer les sorties</h4>
-        <!--  Créer un form
-        {#
+        <!--  Créer un form -->
+
         {{ form_start(filterForm) }}
         {{ form_widget(filterForm) }}
+        <button class="btn btn-secondary mb-5">Rechercher</button>
         {{ form_end(filterForm) }}
-        #}
--->
+
     </div>
     <table class="table">
         <thead>
@@ -34,8 +36,8 @@
         {% for sortie in sorties %}
             <tr>
                 <th scope="row">{{ sortie.nom }}</th>
-                <td>{{ sortie.dateHeureDebut|date('Y-m-d H:i') }}</td>
-                <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i') }}</td>
+                <td>{{ sortie.dateHeureDebut|format_datetime('long', 'short', locale='fr') }}</td>
+                <td>{{ sortie.dateLimiteInscription|format_datetime('long', 'short', locale='fr') }}</td>
                 <td>{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
                 <td>{{ sortie.etat.libelle }}  </td>
                 <td>{% if app.user in sortie.participants %}X{% endif %}</td>
