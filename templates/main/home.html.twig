@@ -37,7 +37,7 @@
                 <td>{{ sortie.dateHeureDebut|date('Y-m-d H:i') }}</td>
                 <td>{{ sortie.dateLimiteInscription|date('Y-m-d H:i') }}</td>
                 <td>{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
-                <td> {#{{ sortie.etat.libelle }} #} </td>
+                <td>{{ sortie.etat }}  </td>
                 <td>{% if app.user in sortie.participants %}X{% endif %}</td>
                 <td>{{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</td>
                 <td>

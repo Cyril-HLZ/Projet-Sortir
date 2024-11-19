@@ -26,6 +26,8 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $dateCreated = $faker->dateTimeBetween('-2 years', 'now');
             $sortie->setDateHeureDebut(\DateTimeImmutable::createFromMutable($dateCreated));
             $sortie->setDur�ee(210);
+
+
             $sortie->setDateLimiteInscription(\DateTimeImmutable::createFromMutable($dateCreated->modify('+1 day')));
             $sortie->setNbInscriptionsMax($faker->numberBetween(5, 20));
             $sortie->setInfosSortie($faker->text());
