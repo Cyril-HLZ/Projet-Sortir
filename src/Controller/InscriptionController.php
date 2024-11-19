@@ -17,12 +17,9 @@ class InscriptionController extends AbstractController
 {
     #[Route('/inscription', name: 'app_inscription')]
     public function register(
-        Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        UserAuthenticatorInterface $userAuthenticator,
-        AppAuthenticator $authenticator,
-        EntityManagerInterface $entityManager
-    ): Response {
+        Request $request, UserPasswordHasherInterface $passwordHasher, UserAuthenticatorInterface $userAuthenticator,
+        AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response {
+
         $participant = new Participant();
         $form = $this->createForm(InscriptionFormType::class, $participant);
         $form->handleRequest($request);
@@ -50,7 +47,7 @@ class InscriptionController extends AbstractController
         }
 
         // Affiche le formulaire
-        return $this->render('inscription/index.html.twig', [
+        return $this->render('inscription/inscription.html.twig', [
             'form' => $form->createView(),
         ]);
     }

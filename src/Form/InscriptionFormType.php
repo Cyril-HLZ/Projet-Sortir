@@ -59,12 +59,6 @@ class InscriptionFormType extends AbstractType
                 'choice_label' => 'nom',
                 'label' => 'Campus',
             ])
-            ->add('sorties', EntityType::class, [
-                'class' => Sortie::class,
-                'choice_label' => 'titre',
-                'multiple' => true,
-                'label' => 'sorties',
-            ])
         ;
     }
 

@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Inscription</h1>
+
+        {% if app.session.flashBag.has('success') %}
+            <div class="alert alert-success">
+                {{ app.session.flashBag.get('success')[0] }}
+            </div>
+        {% endif %}
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.nom) }}
+            {{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.nom) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.prenom) }}
+            {{ form_widget(form.prenom, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.prenom) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.telephone) }}
+            {{ form_widget(form.telephone, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.telephone) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.mail) }}
+            {{ form_widget(form.mail, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.mail) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.plainPassword) }}
+            {{ form_widget(form.plainPassword, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.plainPassword) }}
+        </div>
+
+        <div class="form-group form-check">
+            {{ form_widget(form.administrateur) }}
+            {{ form_label(form.administrateur, 'Administrateur', { 'label_attr': {'class': 'form-check-label'} }) }}
+            {{ form_errors(form.administrateur) }}
+        </div>
+
+        <div class="form-group form-check">
+            {{ form_widget(form.actif) }}
+            {{ form_label(form.actif, 'Activer', { 'label_attr': {'class': 'form-check-label'} }) }}
+            {{ form_errors(form.actif) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.campus) }}
+            {{ form_widget(form.campus, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.campus) }}
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
