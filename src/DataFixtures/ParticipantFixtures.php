@@ -10,25 +10,8 @@ use Doctrine\Persistence\ObjectManager;
 class ParticipantFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
-    {   $faker = \Faker\Factory::create('fr_FR');
-        $campusNames = ["SAINT HERBLAIN", "CHARTRES DE BRETAGNE", "LA ROCHE SUR YON"];
-
-
-        $organisateur = new Participant();
-        $organisateur->setNom('Organisateur');
-        $organisateur->setPrenom($faker->firstName);
-        $organisateur->setTelephone($faker->phoneNumber);
-        $organisateur->setMail('organisateur@test.com');
-        $organisateur->setMotPasse('password');
-        $organisateur->setAdministrateur(true);
-        $organisateur->setActif(true);
-        $organisateur->setCampus($this->getReference("campusSAINT HERBLAIN"));
-
-        $manager->persist($organisateur);
-
-        $this->addReference('participant_organisateur', $organisateur);
-
-
+    {
+        $faker = \Faker\Factory::create('fr_FR');
 
         for ($i = 1; $i <= 10; $i++) {
             $participant = new Participant();
@@ -39,7 +22,10 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
             $participant->setMotPasse('password');
             $participant->setAdministrateur(false);
             $participant->setActif(true);
-            $participant->setCampus($this->getReference("campus".$campusNames[0]));
+
+            // Attribution aléatoire d'un campus
+            $campusReference = "campus" . ["SAINT HERBLAIN", "CHARTRES DE BRETAGNE", "LA ROCHE SUR YON"][rand(0, 2)];
+            $participant->setCampus($this->getReference($campusReference));
 
             $manager->persist($participant);
             $this->addReference('participant'.$i, $participant);

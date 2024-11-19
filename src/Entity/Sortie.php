@@ -23,7 +23,7 @@ class Sortie
     private ?\DateTimeImmutable $dateHeureDebut = null;
 
     #[ORM\Column]
-    private ?int $dur�ee = null;
+    private ?int $duree = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $dateLimiteInscription = null;
@@ -88,14 +88,14 @@ class Sortie
         return $this;
     }
 
-    public function getDur�ee(): ?int
+    public function getDuree(): ?int
     {
-        return $this->dur�ee;
+        return $this->duree;
     }
 
-    public function setDur�ee(int $dur�ee): static
+    public function setDuree(int $duree): static
     {
-        $this->dur�ee = $dur�ee;
+        $this->duree = $duree;
 
         return $this;
     }
