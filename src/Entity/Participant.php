@@ -28,7 +28,7 @@ class Participant
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $motPasse = null;
+    private ?string $password = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $administrateur = null;
@@ -111,14 +111,14 @@ class Participant
         return $this;
     }
 
-    public function getMotPasse(): ?string
+    public function getPassword(): ?string
     {
-        return $this->motPasse;
+        return $this->password;
     }
 
-    public function setMotPasse(string $motPasse): static
+    public function setPassword(string $password): self
     {
-        $this->motPasse = $motPasse;
+        $this->password = $password;
 
         return $this;
     }

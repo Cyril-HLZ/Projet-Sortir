@@ -19,7 +19,7 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
             $participant->setPrenom($faker->firstName);
             $participant->setTelephone($faker->phoneNumber);
             $participant->setMail($faker->email);
-            $participant->setMotPasse('password');
+            $participant->setPassword('password');
             $participant->setAdministrateur(false);
             $participant->setActif(true);
 
