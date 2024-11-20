@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Sortie{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Détails de la sortie</h1>
+
+        <form class="row g-3">
+            <div class="col-md-6">
+                <label for="nom" class="form-label">Nom de la sortie</label>
+                <input type="text" id="nom" class="form-control" value="{{ sortie.nom }}" readonly>
+            </div>
+
+            <div class="col-md-12">
+                <label for="InfosSortie" class="form-label">Description</label>
+                <textarea id="InfosSortie" class="form-control" rows="4" readonly>{{ sortie.InfosSortie }}</textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label for="date" class="form-label">Date</label>
+                <input type="text" id="date" class="form-control" value="{{ sortie.date|date('d/m/Y H:i') }}" readonly>
+            </div>
+
+            <div class="col-md-6">
+                <label for="campus" class="form-label">Campus</label>
+                <input type="text" id="campus" class="form-control" value="{{ sortie.campus.nom }}" readonly>
+            </div>
+
+            <div class="col-md-6">
+                <label for="organisateur" class="form-label">Organisateur</label>
+                <input type="text" id="organisateur" class="form-control" value="{{ sortie.organisateur.nom }}" readonly>
+            </div>
+        </form>
+
+        <div class="mt-4">
+            <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour à la liste</a>
+            <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
+            {{ include('sortie/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

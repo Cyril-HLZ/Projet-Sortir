@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une nouvelle sortie{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Créer une nouvelle sortie</h1>
+
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.nom) }}
+            {{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.nom) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.InfosSortie) }}
+            {{ form_widget(form.InfosSortie, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.InfosSortie) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.dateHeureDebut) }}
+            {{ form_widget(form.dateHeureDebut, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.dateHeureDebut) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.dateLimiteInscription) }}
+            {{ form_widget(form.dateLimiteInscription, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.dateLimiteInscription) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.campus) }}
+            {{ form_widget(form.campus, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.campus) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Créer</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
