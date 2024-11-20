@@ -40,4 +40,8 @@ class VilleRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findLastVille()
+    {
+
+    }
 }

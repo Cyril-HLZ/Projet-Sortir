@@ -6,8 +6,14 @@
     <div>
         <p>
             Date du jour : {{ "now"|format_date('long', locale='fr') }}<br>
-            Participant : {{ app.user.prenom }} {{ app.user.nom }}
         </p>
+            {% if app.user %}
+                <p>
+                    {{ app.user.prenom }} {{ app.user.nom }}
+                </p>
+            {% else %}
+                <p>Aucun utilisateur connecté</p>
+            {% endif %}
     </div>
     <div>
         <h4>Filtrer les sorties</h4>
@@ -43,7 +49,7 @@
                 <td>{% if app.user in sortie.participants %}X{% endif %}</td>
                 <td>{{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</td>
                 <td>
-                    <a href="{{ path('main_home') }}">Afficher</a>
+                    <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher</a>
                     {% if app.user in sortie.participants %}
                         <a href="{{ path('main_home') }}">Se désister</a>
                     {% endif %}
@@ -56,8 +62,9 @@
         {% endfor %}
         </tbody>
     </table>
+
     <div>
-        <a href="/" class="btn btn-secondary">Créer une sortie</a>
+        <a href="{{ path('app_sortie_create') }}" class="btn btn-secondary">Créer une sortie</a>
     </div>
 
 

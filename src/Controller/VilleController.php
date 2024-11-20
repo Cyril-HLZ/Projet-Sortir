@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Ville;
-use App\Form\VilleType;
+use App\Form\VilleFormType;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,31 +14,39 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/ville')]
 final class VilleController extends AbstractController
 {
-    #[Route(name: 'app_ville_index', methods: ['GET'])]
-    public function index(VilleRepository $villeRepository): Response
+    #[Route('/', name: 'ville_list', methods: ['GET'])]
+    public function list(VilleRepository $villeRepository): Response
     {
-        return $this->render('ville/index.html.twig', [
-            'villes' => $villeRepository->findAll(),
+        $minimunDuration = 20;
+        // todo faire la méthode pour récupérer les dernières villes
+        $ville = $villeRepository->findLastVille();
+
+        // todo En attente d'une page ou d'un renseignement concernant la mise en place des villes dans un tableau
+        return $this->render('ville/', [
+            'villes' => $villes,
         ]);
     }
 
-    #[Route('/new', name: 'app_ville_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    /*
+    #[Route('/create', name: 'ville_create', methods: ['GET', 'POST'])]
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $ville = new Ville();
-        $form = $this->createForm(VilleType::class, $ville);
-        $form->handleRequest($request);
+        $villeform = $this->createForm(VilleFormType::class, $ville);
+        $villeform->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($villeform->isSubmitted() && $villeform->isValid()) {
+            // On sauvegarde dans la BDD
             $entityManager->persist($ville);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_ville_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash("sucess", "Le cours a bien été enregistré");
+
+            return $this->redirectToRoute('main/home.html.twig', ['id' => $ville->getId()]);
         }
 
-        return $this->render('ville/new.html.twig', [
-            'ville' => $ville,
-            'form' => $form,
+        return $this->render('ville/home.html.twig', [
+            "villeForm" => $villeform,
         ]);
     }
 
@@ -53,7 +61,7 @@ final class VilleController extends AbstractController
     #[Route('/{id}/edit', name: 'app_ville_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ville $ville, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(VilleType::class, $ville);
+        $form = $this->createForm(VilleFormType::class, $ville);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -77,5 +85,5 @@ final class VilleController extends AbstractController
         }
 
         return $this->redirectToRoute('app_ville_index', [], Response::HTTP_SEE_OTHER);
-    }
+    }*/
 }

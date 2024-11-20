@@ -18,11 +18,11 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findByFilter(array $criteria, $user)
     {
-
         $qb = $this->createQueryBuilder('s')
             ->leftJoin('s.campus', 'c')
             ->leftJoin('s.organisateur', 'o')
             ->leftJoin('s.participants', 'p');
+
 
         if (!empty($criteria['campus'])) {
             $qb->andWhere('s.campus = :campus')

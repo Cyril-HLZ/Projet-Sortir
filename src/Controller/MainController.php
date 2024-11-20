@@ -14,12 +14,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MainController extends AbstractController
 {
-    #[Route('/home', name: 'main_home', methods: ['GET'])]
+    #[Route('/home', name: 'main_home', methods: ['GET', 'POST'])]
     public function home( Request $request, SortieRepository $repository): Response
     {
         $filterForm = $this ->createForm(HomeFilterType::class);
         $filterForm->handleRequest($request);
         $sorties=[];
+
+        dump($filterForm);
+        dump($filterForm->createView());
+
         if($filterForm->isSubmitted() && $filterForm->isValid()){
             $criteria = $filterForm->getData();
             $user = $this ->getUser();
