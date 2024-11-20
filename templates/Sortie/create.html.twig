@@ -32,13 +32,115 @@
         </div>
 
         <div class="form-group">
-            {{ form_label(form.campus) }}
-            {{ form_widget(form.campus, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.campus) }}
+            {{ form_label(form.nbInscriptionsMax) }}
+            {{ form_widget(form.nbInscriptionsMax, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.nbInscriptionsMax) }}
         </div>
 
-        <button type="submit" class="btn btn-primary">Créer</button>
+        <div class="form-group">
+            {{ form_label(form.duree) }}
+            {{ form_widget(form.duree, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.duree) }}
+        </div>
+
+        <div class="form-group ">
+            <label for="campus" class="mb-2">Campus : </label>
+            <input id="campus" class="form-control" readonly
+                   value="{{ app.user.campus.nom }}">
+        </div>
+        <div class="form-group">
+            <label for="villes" class="mb-2">Ville :</label>
+            <select name="villes" id="villes" class="form-control">
+                <option value="">Sélectionner une ville</option>
+                {% for ville in villes %}
+                    <option value="{{ ville.id }}">
+                        {{ ville.nom }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="lieu" class="mb-2">Lieu :</label>
+            <select name="lieu" id="lieu" class="form-control">
+                <option value="">Sélectionner un lieu</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" name="action" value="enregistrer" class="btn btn-primary mt-3">Enregistrer</button>
+            <button type="submit" name="action" value="publier" class="btn btn-primary mt-3">Publier la sortie</button>
+            <a href="{{ path('main_home') }}" class="btn btn-secondary mt-3">Annuler</a>
+        </div>
         {{ form_end(form) }}
     </div>
 {% endblock %}
+
+
+
+
+
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const villeSelect = document.getElementById('villes');
+            if (villeSelect) {
+                villeSelect.addEventListener('change', function () {
+                    const villeId = this.value;
+                    const lieuSelect = document.getElementById('lieu');
+                    const detailsContainer = document.createElement('div');
+                    detailsContainer.id = 'lieu-details';
+
+                    // Vider le select des lieux et les détails
+                    lieuSelect.innerHTML = '<option value="">Sélectionner un lieu</option>';
+                    const existingDetails = document.getElementById('lieu-details');
+                    if (existingDetails) existingDetails.remove();
+
+                    if (villeId) {
+                        fetch("{{ path('api_lieux', {'villeId': 'VILLE_ID'}) }}".replace('VILLE_ID', villeId))
+                            .then(response => response.json())
+                            .then(lieux => {
+                                lieux.forEach(lieu => {
+                                    let option = document.createElement('option');
+                                    option.value = lieu.id;
+                                    option.textContent = lieu.nom;
+                                    option.dataset.rue = lieu.rue;
+                                    option.dataset.codePostal = lieu.code_postal;
+                                    option.dataset.latitude = lieu.latitude;
+                                    option.dataset.longitude = lieu.longitude;
+                                    lieuSelect.appendChild(option);
+                                });
+                            });
+                    }
+                });
+
+                // Ajouter un écouteur pour le changement de lieu
+                const lieuSelect = document.getElementById('lieu');
+                lieuSelect.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const detailsContainer = document.getElementById('lieu-details') || document.createElement('div');
+                    detailsContainer.id = 'lieu-details';
+
+                    if (selectedOption.value) {
+                        detailsContainer.innerHTML = `
+                                                    <div class="form-group">
+                                                        <label class="mb-2">Adresse : </label>
+                                                        <p class="form-control">${selectedOption.dataset.rue} </p>
+                                                        <p class="form-control">Code postal : ${selectedOption.dataset.codePostal}</p>
+                                                        <p class="form-control">Latitude : ${selectedOption.dataset.latitude}</p>
+                                                        <p class="form-control">Longitude : ${selectedOption.dataset.longitude}</p>
+                                                    </div>
+                        `;
+                        // Insérer après le select
+                        lieuSelect.parentNode.insertBefore(detailsContainer, lieuSelect.nextSibling);
+                    } else {
+                        detailsContainer.remove();
+                    }
+                });
+            }
+        });
+    </script>
+
+{% endblock %}
+
 

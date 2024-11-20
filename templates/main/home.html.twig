@@ -27,7 +27,7 @@
     </div>
     <table class="table">
         <thead>
-        <tr class="table-primary">
+        <tr class="table-info">
             <th scope="col">Nom de la sortie</th>
             <th scope="col">Date de la sortie</th>
             <th scope="col">Clotûre</th>
@@ -45,7 +45,7 @@
                 <td>{{ sortie.dateHeureDebut|format_datetime('long', 'short', locale='fr') }}</td>
                 <td>{{ sortie.dateLimiteInscription|format_datetime('long', 'short', locale='fr') }}</td>
                 <td>{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
-                <td>{{ sortie.etat.libelle }}  </td>
+                <td>{{ sortie.etat.libelle }}</td>
                 <td>{% if app.user in sortie.participants %}X{% endif %}</td>
                 <td>{{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</td>
                 <td>

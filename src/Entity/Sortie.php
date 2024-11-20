@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -20,13 +21,13 @@ class Sortie
     private ?string $nom = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $dateHeureDebut = null;
+    private ?DateTime $dateHeureDebut = null;
 
     #[ORM\Column]
     private ?int $duree = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $dateLimiteInscription = null;
+    private ?DateTime $dateLimiteInscription = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $nbInscriptionsMax = null;
@@ -75,12 +76,12 @@ class Sortie
         return $this;
     }
 
-    public function getDateHeureDebut(): ?\DateTimeImmutable
+    public function getDateHeureDebut(): ?Datetime
     {
         return $this->dateHeureDebut;
     }
 
-    public function setDateHeureDebut(\DateTimeImmutable $dateHeureDebut): static
+    public function setDateHeureDebut(DateTime $dateHeureDebut): static
     {
         $this->dateHeureDebut = $dateHeureDebut;
 
@@ -99,12 +100,12 @@ class Sortie
         return $this;
     }
 
-    public function getDateLimiteInscription(): ?\DateTimeImmutable
+    public function getDateLimiteInscription(): ?DateTime
     {
         return $this->dateLimiteInscription;
     }
 
-    public function setDateLimiteInscription(\DateTimeImmutable $dateLimiteInscription): static
+    public function setDateLimiteInscription(DateTime $dateLimiteInscription): static
     {
         $this->dateLimiteInscription = $dateLimiteInscription;
 
