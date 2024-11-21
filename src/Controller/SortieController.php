@@ -48,6 +48,8 @@ final class SortieController extends AbstractController
             'sorties' => $sorties
         ]);
     }*/
+
+
     #[Route('/create', name: 'app_sortie_create', methods: ['GET', 'POST'])]
     public function create(Request                $request,
                            EntityManagerInterface $entityManager,

@@ -30,6 +30,10 @@
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
+            <div>
+                <a href="{{ path('app_password') }}" class="btn btn-secondary">Mot de passe oublié</a>
+            </div>
+
             <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
 

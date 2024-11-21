@@ -47,7 +47,10 @@
                 <td>{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
                 <td>{{ sortie.etat.libelle }}</td>
                 <td>{% if app.user in sortie.participants %}X{% endif %}</td>
-                <td>{{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</td>
+                <td>
+                    <!--<a href="{# #}path('app_organisateur_show', {'id': sortie.organisateur.id}) }}"></a>-->
+                    {{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}
+                </td>
                 <td>
                     <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher</a>
                     {% if app.user in sortie.participants %}
