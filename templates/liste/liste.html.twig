@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Participants{% endblock %}
+
+{% block body %}
+    <div class="container mb-5">
+        <h1 class="mb-4">Liste des Participants</h1>
+
+        {# Affichage du formulaire d'importation #}
+        <div class="mb-4">
+            <h2>Importer des Participants</h2>
+            {{ form_start(form) }}
+            {{ form_row(form.file) }}
+            <button type="submit" class="btn btn-primary">Importer</button>
+            {{ form_end(form) }}
+        </div>
+
+        {# Affichage de la liste des participants #}
+        {% if participants is empty %}
+            <p>Aucun participant n'est enregistré pour le moment.</p>
+        {% else %}
+            <table class="table table-bordered">
+                <thead class="table-light">
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actif</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for participant in participants %}
+                    <tr>
+                        <td>{{ participant.nom }}</td>
+                        <td>{{ participant.prenom }}</td>
+                        <td>{{ participant.mail }}</td>
+                        <td>{{ participant.administrateur ? 'Administrateur' : 'Utilisateur' }}</td>
+                        <td>{{ participant.actif ? 'Oui' : 'Non' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
