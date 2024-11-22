@@ -6,7 +6,10 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\ParticipantRepository;
+use App\Repository\SortieRepository;
 use App\Service\SortieService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -192,5 +195,51 @@ final class SortieController extends AbstractController
         }
 
         return $this->redirectToRoute('main_home');
+    }
+    #[Route('/organisateur/{id}', name: 'app_organisateur_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function showOrganisateur(Participant $organisateur): Response
+    {
+        return $this->render('organisateur/show.html.twig', [
+            'organisateur' => $organisateur,
+        ]);
+    }
+
+    #[Route('/{id}/participant/{participantId}/remove', name: 'app_sortie_participant_remove', requirements: ['id' => '\d+', 'participantId' => '\d+'], methods: ['POST'])]
+    public function removeParticipant(
+        int                    $id,
+        int                    $participantId,
+        SortieRepository       $sortieRepository,
+        ParticipantRepository  $participantRepository,
+        EntityManagerInterface $entityManager,
+        Request                $request
+    ): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        $participant = $participantRepository->find($participantId);
+
+        // Vérification que la sortie et le participant existent
+        if (!$sortie || !$participant) {
+            throw $this->createNotFoundException('Sortie ou participant inexistant');
+        }
+
+        // Vérification si le participant est inscrit à la sortie
+        if (!$sortie->getParticipants()->contains($participant)) {
+            $this->addFlash('warning', 'Le participant n\'est pas inscrit à cette sortie.');
+            return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
+        }
+
+        // Vérification CSRF
+        if (!$this->isCsrfTokenValid('remove_participant' . $participantId, $request->request->get('_token'))) {
+            $this->addFlash('danger', 'Action non autorisée.');
+            return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
+        }
+
+        // Retrait du participant
+        $sortie->removeParticipant($participant);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Participant retiré de la sortie avec succès.');
+        return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
     }
 }
