@@ -39,8 +39,10 @@
     </div>
     <div class="col-md-6">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{{ path('app_annuler_sortie', {'id': sortie.id})}}" class="btn btn-danger">Annuler la sortie</a>
         <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour</a>
     </div>
+
     {{ form_end(form) }}
 {% endblock %}
 
