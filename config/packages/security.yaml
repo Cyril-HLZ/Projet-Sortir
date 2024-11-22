@@ -25,6 +25,9 @@ security:
                 enable_csrf: true
                 default_target_path: main_home
 
+
+
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 

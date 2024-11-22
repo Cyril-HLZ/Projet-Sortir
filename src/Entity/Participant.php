@@ -169,7 +169,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->sorties;
     }
 
-    public function addSortie(Sortie $sorties): static
+    public function addSorties(Sortie $sorties): static
     {
         if (!$this->sorties->contains($sorties)) {
             $this->sorties->add($sorties);
@@ -178,7 +178,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeSortie(Sortie $sorties): static
+    public function removeSorties(Sortie $sorties): static
     {
         $this->sorties->removeElement($sorties);
 
@@ -218,10 +218,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->administrateur ? ['ROLE_ADMIN'] : ['ROLE_USER'];
-
         return array_unique($roles);
     }
-
 
     public function eraseCredentials(): void
     {
