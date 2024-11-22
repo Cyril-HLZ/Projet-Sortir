@@ -102,7 +102,7 @@ class Lieu
         return $this->sorties;
     }
 
-    public function addSortie(Sortie $sorties): static
+    public function addSorties(Sortie $sorties): static
     {
         if (!$this->sorties->contains($sorties)) {
             $this->sorties->add($sorties);
@@ -112,7 +112,7 @@ class Lieu
         return $this;
     }
 
-    public function removeSortie(Sortie $sorties): static
+    public function removeSorties(Sortie $sorties): static
     {
         if ($this->sorties->removeElement($sorties)) {
             // set the owning side to null (unless already changed)
