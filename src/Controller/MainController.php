@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MainController extends AbstractController
 {
-    #[Route('/', name: 'main_home', methods: ['GET', 'POST'])]
+    #[Route('/home', name: 'main_home', methods: ['GET', 'POST'])]
     public function home( Request $request, SortieRepository $repository): Response
     {
         $filterForm = $this ->createForm(HomeFilterType::class);

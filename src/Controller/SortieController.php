@@ -10,6 +10,7 @@ use App\Form\SortieType;
 
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,38 +27,10 @@ final class SortieController extends AbstractController
     {
     }
 
-    /*
-    #[Route('/', name: 'app_sortie_home', methods: ['GET'])]
-    public function home(Request $request, SortieRepository $sortieRepository): Response
-    {
-        // Créez le formulaire de filtrage
-        $filterForm = $this->createForm(SortieFilterType::class);
-        $filterForm->handleRequest($request);
-
-        // Récupérez les sorties
-        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            $criteria = $filterForm->getData();
-            $sorties = $sortieRepository->findByFilter($criteria, $this->getUser());
-        } else {
-            $sorties = $sortieRepository->findAll();
-        }
-
-        // Passez à la vue
-        return $this->render('main/home.html.twig', [
-            'form' => $filterForm->createView(),
-            'sorties' => $sorties
-        ]);
-    }*/
-
-
     #[Route('/create', name: 'app_sortie_create', methods: ['GET', 'POST'])]
-    public function create(Request                $request,
-                           EntityManagerInterface $entityManager,
-                           VilleRepository        $villeRepository,
-                           LieuRepository         $lieuRepository,
-                           EtatRepository         $etatRepository): Response
+    public function create(Request        $request, EntityManagerInterface $entityManager, VilleRepository $villeRepository,
+                           LieuRepository $lieuRepository, EtatRepository $etatRepository): Response
     {
-
         $participant = $this->getUser();
 
         $villes = $villeRepository->findAll();
@@ -180,5 +153,52 @@ final class SortieController extends AbstractController
         }
 
         return $this->redirectToRoute('main_home', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/organisateur/{id}', name: 'app_organisateur_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function showOrganisateur(Participant $organisateur): Response
+    {
+        return $this->render('organisateur/show.html.twig', [
+            'organisateur' => $organisateur,
+        ]);
+    }
+
+    #[Route('/{id}/participant/{participantId}/remove', name: 'app_sortie_participant_remove', requirements: ['id' => '\d+', 'participantId' => '\d+'], methods: ['POST'])]
+    public function removeParticipant(
+        int                    $id,
+        int                    $participantId,
+        SortieRepository       $sortieRepository,
+        ParticipantRepository  $participantRepository,
+        EntityManagerInterface $entityManager,
+        Request                $request
+    ): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        $participant = $participantRepository->find($participantId);
+
+        // Vérification que la sortie et le participant existent
+        if (!$sortie || !$participant) {
+            throw $this->createNotFoundException('Sortie ou participant inexistant');
+        }
+
+        // Vérification si le participant est inscrit à la sortie
+        if (!$sortie->getParticipants()->contains($participant)) {
+            $this->addFlash('warning', 'Le participant n\'est pas inscrit à cette sortie.');
+            return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
+        }
+
+        // Vérification CSRF
+        if (!$this->isCsrfTokenValid('remove_participant' . $participantId, $request->request->get('_token'))) {
+            $this->addFlash('danger', 'Action non autorisée.');
+            return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
+        }
+
+        // Retrait du participant
+        $sortie->removeParticipant($participant);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Participant retiré de la sortie avec succès.');
+        return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
     }
 }

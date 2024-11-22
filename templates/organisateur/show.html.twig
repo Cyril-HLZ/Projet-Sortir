@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ParticipantController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Profil Organisateur</h1>
+
+    <form class="row g-3">
+        <div class="col-md-6">
+            <label for="nom" class="form-label">Nom :</label>
+            <input type="text" id="nom" class="form-control" value="{{ organisateur.nom }}" readonly>
+
+            <label for="prenom" class="form-label">Prénom :</label>
+            <input type="text" id="prenom" class="form-control" value="{{ organisateur.prenom }}" readonly>
+
+            <label for="telephone" class="form-label">Telephone :</label>
+            <input type="text" id="telephone" class="form-control" value="{{ organisateur.telephone }}" readonly>
+
+            <label for="mail" class="form-label">Mail :</label>
+            <input type="text" id="mail" class="form-control" value="{{ organisateur.mail }}" readonly>
+
+            <label for="campus" class="form-label">Campus :</label>
+            <input type="text" id="campus" class="form-control" value="{{ organisateur.campus.nom }}" readonly>
+        </div>
+
+        <!--
+        <div class="form-group">
+            <label for="photo" class="form-label">Photo de profil :</label>
+            {# if participant.photo #}
+                <img src="{# #} asset('uploads/photos/' ~ participant.photo) }}" alt="Photo de {# #} participant.nom }}" class="img-thumbnail" width="150">
+
+                <p class="text-muted">Pas de photo disponible pour ce participant.</p>
+        </div>
+        -->
+    </form>
+</div>
+{% endblock %}

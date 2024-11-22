@@ -48,8 +48,8 @@
                 <td>{{ sortie.etat.libelle }}</td>
                 <td>{% if app.user in sortie.participants %}X{% endif %}</td>
                 <td>
-                    <!--<a href="{# #}path('app_organisateur_show', {'id': sortie.organisateur.id}) }}"></a>-->
-                    {{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}
+                    <a href="{{ path('app_organisateur_show', {'id': sortie.organisateur.id}) }}">
+                    {{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</a>
                 </td>
                 <td>
                     <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher</a>

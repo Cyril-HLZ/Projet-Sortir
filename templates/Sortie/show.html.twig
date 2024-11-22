@@ -65,7 +65,13 @@
                 <tbody>
                 {% for participant in sortie.participants %}
                     <tr>
-                        <th scope="row">{{ participant.prenom }} {{ participant.nom }}</th>
+                        <th scope="row">{{ participant.prenom }} {{ participant.nom }}{% if is_granted("ROLE_ADMIN") %}
+                                <form method="POST" action="{{ path('app_sortie_participant_remove', {'id': sortie.id, 'participantId': participant.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('remove_participant' ~ participant.id) }}">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir retirer ce participant ?');">Supprimer</button>
+                                </form>
+                            {% endif %}
+                        </th>
                     </tr>
                 {% else %}
                     <tr>
@@ -78,16 +84,6 @@
 
         <div class="mt-6">
             <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour à la liste</a>
-            {% if app.user == sortie.organisateur %}
-                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
-                <form method="post" action="{{ path('app_sortie_delete', {'id': sortie.id}) }}"
-                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?');"
-                      style="display: inline-block;">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
-                    <button class="btn btn-danger">Supprimer</button>
-                </form>
-            {% endif %}
-
         </div>
     </div>
 {% endblock %}

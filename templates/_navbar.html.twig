@@ -26,9 +26,11 @@
                     <a class="nav-link" href="{{ path('main_home') }}">Campus</a>
                 </li>
                 {% if app.user %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_inscription') }}">Mon profil</a>
-                    </li>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_inscription') }}">Mon profil</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_login') }}">Se deconnecter</a>
                     </li>
