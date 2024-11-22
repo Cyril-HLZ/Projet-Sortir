@@ -9,48 +9,56 @@
         <form class="row g-3">
             <div class="col-md-6">
                 <label for="nom" class="form-label">Nom de la sortie : </label>
-                <input type="text" id="nom" class="form-control" value="{{ sortie.nom }}" readonly>
+                <input type="text" id="nom" class="form-control" value="{{ sortie.nom }}" disabled>
 
                 <label for="date" class="form-label">Date et heure de la sortie: </label>
                 <input type="text" id="date" class="form-control" value="{{ sortie.dateHeureDebut|date('d/m/Y H:i') }}"
-                       readonly>
+                       disabled>
 
                 <label for="date" class="form-label">Date limite d'inscription : </label>
                 <input type="text" id="date" class="form-control"
-                       value="{{ sortie.dateLimiteInscription|date('d/m/Y') }}" readonly>
+                       value="{{ sortie.dateLimiteInscription|date('d/m/Y') }}" disabled>
 
                 <label for="place" class="form-label">Nombre de places : </label>
-                <input type="text" id="place" class="form-control" value="{{ sortie.nbInscriptionsMax }}" readonly>
+                <input type="text" id="place" class="form-control" value="{{ sortie.nbInscriptionsMax }}" disabled>
 
                 <label for="duree" class="form-label">Durée : </label>
-                <input type="text" id="duree" class="form-control" value="{{ sortie.duree }} minutes" readonly>
+                <input type="text" id="duree" class="form-control" value="{{ sortie.duree }} minutes" disabled>
+                {% if sortie.etat.libelle == 'Annulée' %}
+                    <label for="InfosSortie" class="form-label">Raison de l'annulation : </label>
+                    <textarea id="InfosSortie" class="form-control" rows="4"
+                              disabled>{{ sortie.InfosSortie }}</textarea>
+                {% else %}
 
-                <label for="InfosSortie" class="form-label">Description et infos : </label>
-                <textarea id="InfosSortie" class="form-control" rows="4" readonly>{{ sortie.InfosSortie }}</textarea>
+                    <label for="InfosSortie" class="form-label">Description et infos : </label>
+                    <textarea id="InfosSortie" class="form-control" rows="4"
+                              disabled>{{ sortie.InfosSortie }}</textarea>
+                {% endif %}
+
 
             </div>
             <div class="col-md-6">
                 <label for="campus" class="form-label">Campus : </label>
-                <input type="text" id="campus" class="form-control" value="{{ sortie.campus.nom }}" readonly>
+                <input type="text" id="campus" class="form-control" value="{{ sortie.campus.nom }}" disabled>
 
                 <label for="ville" class="form-label">Ville : </label>
-                <input type="text" id="ville" class="form-control" value="{{ sortie.lieu.ville.nom }}" readonly>
+                <input type="text" id="ville" class="form-control" value="{{ sortie.lieu.ville.nom }}" disabled>
 
                 <label for="lieu" class="form-label">Lieu : </label>
-                <input type="text" id="lieu" class="form-control" value="{{ sortie.lieu.nom }}" readonly>
+                <input type="text" id="lieu" class="form-control" value="{{ sortie.lieu.nom }}" disabled>
 
                 <label for="lieu" class="form-label">Rue : </label>
-                <input type="text" id="lieu" class="form-control" value="{{ sortie.lieu.rue }}" readonly>
+                <input type="text" id="lieu" class="form-control" value="{{ sortie.lieu.rue }}" disabled>
 
                 <label for="code_postal" class="form-label">Code postal : </label>
                 <input type="text" id="code_postal" class="form-control" value="{{ sortie.lieu.ville.codePostal }}"
-                       readonly>
+                       disabled>
 
                 <label for="latitude" class="form-label">Latitude : </label>
-                <input type="text" id="latitude" class="form-control" value="{{ sortie.lieu.latitude }}" readonly>
+                <input type="text" id="latitude" class="form-control" value="{{ sortie.lieu.latitude }}" disabled>
 
                 <label for="longitude" class="form-label">Longitude : </label>
-                <input type="text" id="longitude" class="form-control" value="{{ sortie.lieu.longitude }}" readonly>
+                <input type="text" id="longitude" class="form-control" value="{{ sortie.lieu.longitude }}" disabled>
             </div>
         </form>
 
@@ -65,13 +73,7 @@
                 <tbody>
                 {% for participant in sortie.participants %}
                     <tr>
-                        <th scope="row">{{ participant.prenom }} {{ participant.nom }}{% if is_granted("ROLE_ADMIN") %}
-                                <form method="POST" action="{{ path('app_sortie_participant_remove', {'id': sortie.id, 'participantId': participant.id}) }}">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('remove_participant' ~ participant.id) }}">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir retirer ce participant ?');">Supprimer</button>
-                                </form>
-                            {% endif %}
-                        </th>
+                        <th scope="row">{{ participant.prenom }} {{ participant.nom }}</th>
                     </tr>
                 {% else %}
                     <tr>
@@ -84,6 +86,25 @@
 
         <div class="mt-6">
             <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour à la liste</a>
+            {% if app.user == sortie.organisateur %}
+                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
+                <form method="post" action="{{ path('app_sortie_delete', {'id': sortie.id}) }}"
+                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?');"
+                      style="display: inline-block;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
+                    <button class="btn btn-danger">Supprimer</button>
+                </form>
+            {% endif %}
+            {% if app.user not in sortie.participants
+                and sortie.etat.libelle == 'Ouverte'
+                and sortie.participants|length < sortie.nbInscriptionsMax %}
+                <form method="post" action="{{ path('app_inscription_sortie', {'id': sortie.id}) }}"
+                      onsubmit="return confirm('Vous inscrire à cette sortie ?');"
+                      style="display: inline-block;">
+                    <button class="btn btn-primary">S'inscrire</button>
+                </form>
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}

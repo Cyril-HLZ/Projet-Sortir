@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Sortie{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Détails de la sortie</h1>
+
+        <form class="row g-3" method="post" action="{{ path('app_annuler_sortie', {'id': sortie.id}) }}">
+            <label for="nom" class="form-label">Nom de la sortie : </label>
+            <input type="text" id="nom" class="form-control" value="{{ sortie.nom }}" readonly>
+
+            <label for="date" class="form-label">Date et heure de la sortie: </label>
+            <input type="text" id="date" class="form-control" value="{{ sortie.dateHeureDebut|date('d/m/Y H:i') }}"
+                   readonly>
+
+            <label for="campus" class="form-label">Campus : </label>
+            <input type="text" id="campus" class="form-control" value="{{ sortie.campus.nom }}" readonly>
+
+            <label for="ville" class="form-label">Lieu : </label>
+            <input type="text" id="ville" class="form-control"
+                   value="{{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}"
+                   readonly>
+            <label for="motif" class="form-label">Motif : </label>
+            <textarea rows="4" name="motif" id="motif" class="form-control" required></textarea>
+
+            <button class="btn btn-danger">Annuler la sortie</button>
+            <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}" class="btn btn-secondary">Retour</a>
+
+        </form>
+    </div>
+{% endblock %}

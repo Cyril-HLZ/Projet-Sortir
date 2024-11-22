@@ -52,9 +52,16 @@
                     {{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</a>
                 </td>
                 <td>
-                    <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher</a>
-                    {% if app.user in sortie.participants %}
-                        <a href="{{ path('main_home') }}">Se désister</a>
+                    <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">
+                        <button class="btn btn-link p-0">
+                            Afficher
+                        </button>
+                    </a>
+                    {% if app.user in sortie.participants and sortie.etat.libelle != 'Annulée' and sortie.etat.libelle != 'Passée'  %}
+                        <form method="post" action="{{ path('app_desistement', {'id': sortie.id}) }}" >
+                            <input type="hidden" name="_method" value="POST">
+                            <button type="submit" class="btn btn-link p-0">Se désister</button>
+                        </form>
                     {% endif %}
                 </td>
             </tr>
