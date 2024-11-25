@@ -3,47 +3,65 @@
 {% block title %}Edit Sortie{% endblock %}
 
 {% block body %}
-    {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
-    <div class="col-md-6">
-        {{ form_row(form.nom) }}
-        {{ form_row(form.dateHeureDebut) }}
-        {{ form_row(form.dateLimiteInscription) }}
-        {{ form_row(form.nbInscriptionsMax) }}
-        {{ form_row(form.duree) }}
-        {{ form_row(form.InfosSortie) }}
-    </div>
-    <div class="col-md-6">
-        <div class="form-group ">
-            <label for="campus" class="mb-2">Campus : </label>
-            <input id="campus" class="form-control" readonly
-                   value="{{ app.user.campus.nom }}">
-        </div>
-        <div class="form-group">
-            <label for="villes" class="mb-2">Ville :</label>
-            <select name="villes" id="villes" class="form-control">
-                <option value="">Sélectionner une ville</option>
-                {% for ville in villes %}
-                    <option value="{{ ville.id }}">
-                        {{ ville.nom }}
-                    </option>
-                {% endfor %}
-            </select>
+    <div class="container-fluid d-flex justify-content-center">
+        {{ form_start(form, {'attr': {'class': 'row m-4'}}) }}
+        <h1 class="h1 text-center mb-4">Modifier la sortie</h1>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    {{ form_row(form.nom) }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form_row(form.dateHeureDebut) }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form_row(form.dateLimiteInscription) }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form_row(form.nbInscriptionsMax) }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form_row(form.duree) }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label for="campus" class="form-label">Campus : </label>
+                    <input id="campus" class="form-control" readonly value="{{ app.user.campus.nom }}">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="villes" class="form-label">Ville :</label>
+                    <select name="villes" id="villes" class="form-control">
+                        <option value="">Sélectionner une ville</option>
+                        {% for ville in villes %}
+                            <option value="{{ ville.id }}">{{ ville.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="lieu" class="form-label">Lieu :</label>
+                    <select name="lieu" id="lieu" class="form-control">
+                        <option value="">Sélectionner un lieu</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="lieu" class="mb-2">Lieu :</label>
-            <select name="lieu" id="lieu" class="form-control">
-                <option value="">Sélectionner un lieu</option>
-            </select>
+        <div class="col-12 mb-3">
+            {{ form_row(form.InfosSortie) }}
         </div>
-    </div>
-    <div class="col-md-6">
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-        <a href="{{ path('app_annuler_sortie', {'id': sortie.id})}}" class="btn btn-danger">Annuler la sortie</a>
-        <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour</a>
+
+        <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+            <button type="submit" class="btn btn-primary flex-fill">Enregistrer</button>
+            <a href="{{ path('app_annuler_sortie', {'id': sortie.id}) }}" class="btn btn-danger flex-fill">Annuler la
+                sortie</a>
+            <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Retour</a>
+        </div>
+        {{ form_end(form) }}
     </div>
 
-    {{ form_end(form) }}
 {% endblock %}
 
 

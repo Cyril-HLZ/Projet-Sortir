@@ -3,82 +3,63 @@
 {% block title %}Créer une nouvelle sortie{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1>Créer une nouvelle sortie</h1>
-
+    <div class="container-fluid">
         {{ form_start(form) }}
-        <div class="form-group">
-            {{ form_label(form.nom) }}
-            {{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.nom) }}
+        <h1 class="h1 text-center">Créer une nouvelle sortie</h1>
+
+        <div class="row align-items-end">
+            <div class="col-6">
+                {{ form_row(form.nom) }}
+                {{ form_row(form.dateHeureDebut) }}
+                {{ form_row(form.dateLimiteInscription) }}
+            </div>
+            <div class="col-6">
+                <div class="form-group mb-3">
+                    <label for="campus" class="form-label">Campus : </label>
+                    <input id="campus" class="form-control" readonly value="{{ app.user.campus.nom }}">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="villes" class="form-label">Ville :</label>
+                    <select name="villes" id="villes" class="form-control">
+                        <option value="">Sélectionner une ville</option>
+                        {% for ville in villes %}
+                            <option value="{{ ville.id }}">{{ ville.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="lieu" class="form-label">Lieu :</label>
+                    <select name="lieu" id="lieu" class="form-control">
+                        <option value="">Sélectionner un lieu</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            {{ form_label(form.InfosSortie) }}
-            {{ form_widget(form.InfosSortie, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.InfosSortie) }}
+        <div class="row align-items-end">
+            <div class="col-6">
+                {{ form_row(form.nbInscriptionsMax) }}
+                {{ form_row(form.duree) }}
+            </div>
+            <div class="col-6" id="lieu-details-container">
+                <!-- lieu details will be inserted here by JavaScript -->
+            </div>
         </div>
 
-        <div class="form-group">
-            {{ form_label(form.dateHeureDebut) }}
-            {{ form_widget(form.dateHeureDebut, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.dateHeureDebut) }}
+        <div class="row">
+            <div class="col-12">
+                {{ form_row(form.InfosSortie) }}
+            </div>
         </div>
 
-        <div class="form-group">
-            {{ form_label(form.dateLimiteInscription) }}
-            {{ form_widget(form.dateLimiteInscription, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.dateLimiteInscription) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(form.nbInscriptionsMax) }}
-            {{ form_widget(form.nbInscriptionsMax, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.nbInscriptionsMax) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(form.duree) }}
-            {{ form_widget(form.duree, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.duree) }}
-        </div>
-
-        <div class="form-group ">
-            <label for="campus" class="mb-2">Campus : </label>
-            <input id="campus" class="form-control" readonly
-                   value="{{ app.user.campus.nom }}">
-        </div>
-        <div class="form-group">
-            <label for="villes" class="mb-2">Ville :</label>
-            <select name="villes" id="villes" class="form-control">
-                <option value="">Sélectionner une ville</option>
-                {% for ville in villes %}
-                    <option value="{{ ville.id }}">
-                        {{ ville.nom }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="lieu" class="mb-2">Lieu :</label>
-            <select name="lieu" id="lieu" class="form-control">
-                <option value="">Sélectionner un lieu</option>
-            </select>
-        </div>
-        <div>
-            <button type="submit" name="action" value="enregistrer" class="btn btn-primary mt-3">Enregistrer</button>
-            <button type="submit" name="action" value="publier" class="btn btn-primary mt-3">Publier la sortie</button>
-            <a href="{{ path('main_home') }}" class="btn btn-secondary mt-3">Annuler</a>
+        <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+            <button type="submit" name="action" value="enregistrer" class="btn btn-primary flex-fill">Enregistrer</button>
+            <button type="submit" name="action" value="publier" class="btn btn-success flex-fill">Publier la sortie</button>
+            <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Annuler</a>
         </div>
         {{ form_end(form) }}
     </div>
 {% endblock %}
-
-
-
-
-
 
 {% block javascripts %}
     <script>
@@ -88,13 +69,8 @@
                 villeSelect.addEventListener('change', function () {
                     const villeId = this.value;
                     const lieuSelect = document.getElementById('lieu');
-                    const detailsContainer = document.createElement('div');
-                    detailsContainer.id = 'lieu-details';
-
-                    // Vider le select des lieux et les détails
                     lieuSelect.innerHTML = '<option value="">Sélectionner un lieu</option>';
-                    const existingDetails = document.getElementById('lieu-details');
-                    if (existingDetails) existingDetails.remove();
+                    document.getElementById('lieu-details-container').innerHTML = '';
 
                     if (villeId) {
                         fetch("{{ path('api_lieux', {'villeId': 'VILLE_ID'}) }}".replace('VILLE_ID', villeId))
@@ -114,33 +90,26 @@
                     }
                 });
 
-                // Ajouter un écouteur pour le changement de lieu
                 const lieuSelect = document.getElementById('lieu');
                 lieuSelect.addEventListener('change', function () {
                     const selectedOption = this.options[this.selectedIndex];
-                    const detailsContainer = document.getElementById('lieu-details') || document.createElement('div');
-                    detailsContainer.id = 'lieu-details';
+                    const detailsContainer = document.getElementById('lieu-details-container');
 
                     if (selectedOption.value) {
                         detailsContainer.innerHTML = `
-                                                    <div class="form-group">
-                                                        <label class="mb-2">Adresse : </label>
-                                                        <p class="form-control">${selectedOption.dataset.rue} </p>
-                                                        <p class="form-control">Code postal : ${selectedOption.dataset.codePostal}</p>
-                                                        <p class="form-control">Latitude : ${selectedOption.dataset.latitude}</p>
-                                                        <p class="form-control">Longitude : ${selectedOption.dataset.longitude}</p>
-                                                    </div>
+                            <div class="form-group">
+                                <label class="form-label">Adresse : </label>
+                                <p class="form-control">${selectedOption.dataset.rue}</p>
+                                <p class="form-control">Code postal : ${selectedOption.dataset.codePostal}</p>
+                                <p class="form-control">Latitude : ${selectedOption.dataset.latitude}</p>
+                                <p class="form-control">Longitude : ${selectedOption.dataset.longitude}</p>
+                            </div>
                         `;
-                        // Insérer après le select
-                        lieuSelect.parentNode.insertBefore(detailsContainer, lieuSelect.nextSibling);
                     } else {
-                        detailsContainer.remove();
+                        detailsContainer.innerHTML = '';
                     }
                 });
             }
         });
     </script>
-
 {% endblock %}
-
-

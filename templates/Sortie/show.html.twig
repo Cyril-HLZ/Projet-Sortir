@@ -3,10 +3,9 @@
 {% block title %}Détails de la Sortie{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="mb-4">Détails de la sortie</h1>
-
-        <form class="row g-3">
+    <div class="container-fluid d-flex justify-content-center">
+        <form class="row g-4 m-4">
+            <h1 class="h1 text-center">Détails de la sortie</h1>
             <div class="col-md-6">
                 <label for="nom" class="form-label">Nom de la sortie : </label>
                 <input type="text" id="nom" class="form-control" value="{{ sortie.nom }}" disabled>
@@ -24,18 +23,6 @@
 
                 <label for="duree" class="form-label">Durée : </label>
                 <input type="text" id="duree" class="form-control" value="{{ sortie.duree }} minutes" disabled>
-                {% if sortie.etat.libelle == 'Annulée' %}
-                    <label for="InfosSortie" class="form-label">Raison de l'annulation : </label>
-                    <textarea id="InfosSortie" class="form-control" rows="4"
-                              disabled>{{ sortie.InfosSortie }}</textarea>
-                {% else %}
-
-                    <label for="InfosSortie" class="form-label">Description et infos : </label>
-                    <textarea id="InfosSortie" class="form-control" rows="4"
-                              disabled>{{ sortie.InfosSortie }}</textarea>
-                {% endif %}
-
-
             </div>
             <div class="col-md-6">
                 <label for="campus" class="form-label">Campus : </label>
@@ -60,12 +47,25 @@
                 <label for="longitude" class="form-label">Longitude : </label>
                 <input type="text" id="longitude" class="form-control" value="{{ sortie.lieu.longitude }}" disabled>
             </div>
-        </form>
+            <div class="col-12">
+                {% if sortie.etat.libelle == 'Annulée' %}
+                    <label for="InfosSortie" class="form-label text-danger d-block text-center">Raison de l'annulation : </label>
+                    <textarea id="InfosSortie" class="form-control" rows="4"
+                              disabled>{{ sortie.InfosSortie }}</textarea>
+                {% else %}
+                    <label for="InfosSortie" class="form-label">Description et infos : </label>
+                    <textarea id="InfosSortie" class="form-control" rows="4"
+                              disabled>{{ sortie.InfosSortie }}</textarea>
+                {% endif %}
+            </div>
 
-        <div class="col-6 mt-4">
+        </form>
+    </div>
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="col-4">
             <table class="table">
                 <thead>
-                <tr class="table-info">
+                <tr class="table-primary">
                     <th scope="col">Listes des participants {{ sortie.participants|length }}
                         /{{ sortie.nbInscriptionsMax }}</th>
                 </tr>
@@ -83,28 +83,31 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="mt-6">
-            <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour à la liste</a>
-            {% if app.user == sortie.organisateur %}
-                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
+    </div>
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="d-flex justify-content-center align-items-center gap-2">
+            <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Retour à la liste</a>
+            {% if app.user == sortie.organisateur and sortie.etat.libelle != 'Annulée' %}
+                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}" class="btn btn-primary flex-fill">Modifier</a>
                 <form method="post" action="{{ path('app_sortie_delete', {'id': sortie.id}) }}"
-                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?');"
-                      style="display: inline-block;">
+                      class="d-inline m-0 p-0 border-0 flex-fill"
+                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?')">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
-                    <button class="btn btn-danger">Supprimer</button>
+                    <button class="btn btn-danger w-100">Supprimer</button>
                 </form>
             {% endif %}
-            {% if app.user not in sortie.participants
-                and sortie.etat.libelle == 'Ouverte'
-                and sortie.participants|length < sortie.nbInscriptionsMax %}
-                <form method="post" action="{{ path('app_inscription_sortie', {'id': sortie.id}) }}"
-                      onsubmit="return confirm('Vous inscrire à cette sortie ?');"
-                      style="display: inline-block;">
-                    <button class="btn btn-primary">S'inscrire</button>
+            {% if app.user not in sortie.participants and sortie.etat.libelle == 'Ouverte' and sortie.participants|length < sortie.nbInscriptionsMax %}
+                <form class="d-inline m-0 p-0 border-0 flex-fill" method="post"
+                      action="{{ path('app_inscription_sortie', {'id': sortie.id}) }}"
+                      onsubmit="return confirm('Vous inscrire à cette sortie ?')">
+                    <input type="hidden" name="_method" value="POST">
+                    <button class="btn btn-primary w-100">S'inscrire</button>
                 </form>
             {% endif %}
-
         </div>
     </div>
+
+
+
 {% endblock %}

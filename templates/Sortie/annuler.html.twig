@@ -3,10 +3,9 @@
 {% block title %}Détails de la Sortie{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="mb-4">Détails de la sortie</h1>
-
-        <form class="row g-3" method="post" action="{{ path('app_annuler_sortie', {'id': sortie.id}) }}">
+    <div class="container-fluid d-flex justify-content-center">
+        <form class="row m-4" method="post" action="{{ path('app_annuler_sortie', {'id': sortie.id}) }}">
+            <h1 class="h1 text-center">Détails de la sortie</h1>
             <label for="nom" class="form-label">Nom de la sortie : </label>
             <input type="text" id="nom" class="form-control" value="{{ sortie.nom }}" readonly>
 
@@ -23,9 +22,10 @@
                    readonly>
             <label for="motif" class="form-label">Motif : </label>
             <textarea rows="4" name="motif" id="motif" class="form-control" required></textarea>
-
-            <button class="btn btn-danger">Annuler la sortie</button>
-            <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}" class="btn btn-secondary">Retour</a>
+            <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+                <button class="btn btn-danger flex-fill">Annuler la sortie</button>
+                <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}" class="btn btn-secondary flex-fill">Retour</a>
+            </div>
 
         </form>
     </div>
