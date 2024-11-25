@@ -19,15 +19,13 @@ final class VilleController extends AbstractController
     {
         $minimunDuration = 20;
         // todo faire la méthode pour récupérer les dernières villes
-        $ville = $villeRepository->findLastVille();
+        $villes = $villeRepository->findAll();
 
-        // todo En attente d'une page ou d'un renseignement concernant la mise en place des villes dans un tableau
         return $this->render('ville/', [
             'villes' => $villes,
         ]);
     }
 
-    /*
     #[Route('/create', name: 'ville_create', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -42,11 +40,12 @@ final class VilleController extends AbstractController
 
             $this->addFlash("sucess", "Le cours a bien été enregistré");
 
-            return $this->redirectToRoute('main/home.html.twig', ['id' => $ville->getId()]);
+            return $this->redirectToRoute('main_home');
         }
 
-        return $this->render('ville/home.html.twig', [
+        return $this->render('ville/index.html.twig', [
             "villeForm" => $villeform,
+            'ville' => $ville,
         ]);
     }
 
@@ -85,5 +84,5 @@ final class VilleController extends AbstractController
         }
 
         return $this->redirectToRoute('app_ville_index', [], Response::HTTP_SEE_OTHER);
-    }*/
+    }
 }

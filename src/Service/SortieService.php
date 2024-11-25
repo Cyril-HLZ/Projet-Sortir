@@ -16,13 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
 class SortieService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private EtatRepository $etatRepository,
-        private SortieRepository $sortieRepository,
-        private ParticipantRepository $participantRepository,
-        private LieuRepository $lieuRepository,
-        private VilleRepository $villeRepository,
-    ) {
+        private readonly EntityManagerInterface $entityManager,
+        private readonly EtatRepository         $etatRepository,
+        private readonly SortieRepository       $sortieRepository,
+        private readonly ParticipantRepository  $participantRepository,
+        private readonly LieuRepository         $lieuRepository,
+        private readonly VilleRepository        $villeRepository,
+    )
+    {
     }
 
     public function verifierDates(Sortie $sortie): array
@@ -64,6 +65,8 @@ class SortieService
         $sortie->getParticipants()->add($participant);
         $participant->getSorties()->add($sortie);
 
+        $this->entityManager->persist($sortie);
+        $this->entityManager->persist($participant);
         $this->entityManager->flush();
         return [];
     }
@@ -128,8 +131,13 @@ class SortieService
     {
         $now = new \DateTime();
 
-        if ($sortie->getEtat()->getLibelle() !== 'Ouverte') {
+        if ($sortie->getEtat()->getLibelle() !== 'Ouverte' && $sortie->getEtat()->getLibelle() !== 'Créer') {
             $errors[] = "Impossible de se désister, la sortie n'est pas ouverte";
+            return false;
+        }
+
+        if ($sortie->getOrganisateur() === $participant) {
+            $errors[] = "Impossible de se désister, Vous êtes l'organisateur de l'evenement!";
             return false;
         }
 
@@ -168,18 +176,6 @@ class SortieService
         return true;
     }
 
-    public function publier(Sortie $sortie): array
-    {
-        $errors = $this->verifierDates($sortie);
-        if (!empty($errors)) {
-            return $errors;
-        }
-
-        $etatOuvert = $this->etatRepository->findOneBy(['libelle' => 'Ouverte']);
-        $sortie->setEtat($etatOuvert);
-        $this->entityManager->flush();
-        return [];
-    }
 
     public function creer(Sortie $sortie, Participant $participant, Request $request): array
     {
@@ -219,10 +215,12 @@ class SortieService
 
         return [];
     }
+
     public function getVilles(): array
     {
         return $this->villeRepository->findAll();
     }
+
     public function modifier(Sortie $sortie, Participant $participant, Request $request): array
     {
         if ($sortie->getOrganisateur() !== $participant) {
@@ -246,6 +244,7 @@ class SortieService
         $this->entityManager->flush();
         return [];
     }
+
     public function getLieuxVille(int $villeId): array
     {
         $lieux = $this->lieuRepository->findBy(['ville' => $villeId]);
