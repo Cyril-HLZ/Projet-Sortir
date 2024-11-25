@@ -17,11 +17,9 @@ final class VilleController extends AbstractController
     #[Route('/', name: 'ville_list', methods: ['GET'])]
     public function list(VilleRepository $villeRepository): Response
     {
-        $minimunDuration = 20;
-        // todo faire la méthode pour récupérer les dernières villes
         $villes = $villeRepository->findAll();
 
-        return $this->render('ville/', [
+        return $this->render('ville/show.html.twig', [
             'villes' => $villes,
         ]);
     }

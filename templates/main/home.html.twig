@@ -32,11 +32,10 @@
                 <a href="{{ path('app_sortie_create') }}" class="btn btn-primary flex-fill">Créer une sortie</a>
             </div>
         </div>
-
     </div>
-    <div class="container-fluid mt-3">
-        {{ form_end(filterForm) }}
-        <table class="table table-striped ">
+    {{ form_end(filterForm) }}
+    <div class="table-responsive mt-3">
+        <table class="table table-striped">
             <thead>
             <tr class="table-primary">
                 <th scope="col">Nom de la sortie</th>
