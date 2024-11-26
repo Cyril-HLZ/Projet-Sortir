@@ -3,22 +3,46 @@
 {% block title %}Liste des Participants{% endblock %}
 
 {% block body %}
-    <div class="container mb-5">
-        <h1 class="mb-4">Liste des Participants</h1>
 
+        {{ form_start(filterForm, {'attr': {'class': 'w-100 m-2', 'style': 'max-width: 100% !important;'}}) }}
+        <h1 class="h1 text-center">Filtrer les inscrits</h1>
+        <div class="row align-items-end">
+            {% for field in filterForm %}
+                <div class="col-6">
+                    {{ form_row(field) }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row d-flex justify-content-between mt-3">
+            <button class="btn btn-secondary" type="submit">Rechercher</button>
+            <a href="{{ path('app_participants_list') }}" class="btn btn-warning">Réinitialiser</a>
+        </div>
+        {{ form_end(filterForm) }}
+
+        {% if participants is empty %}
+            <p class="mt-4">Aucun participant trouvé pour ces critères.</p>
+        {% else %}
+            <h2 class="mt-4">Liste des Participants ({{ participants|length }})</h2>
+            <!-- Tableau des participants -->
+        {% endif %}
+
+    <div class="container mb-5">
+
+        {# Affichage du formulaire d'importation #}
         {# Affichage du formulaire d'importation #}
         <div class="mb-4">
             <h2>Importer des Participants</h2>
-            {{ form_start(form) }}
-            {{ form_row(form.file) }}
+            {{ form_start(importForm, {'attr': {'class': 'w-100 m-2', 'style': 'max-width: 100% !important;'}}) }}
+            {{ form_row(importForm.file) }}
             <button type="submit" class="btn btn-primary">Importer</button>
-            {{ form_end(form) }}
+            {{ form_end(importForm) }}
         </div>
 
         {# Affichage de la liste des participants #}
         {% if participants is empty %}
             <p>Aucun participant n'est enregistré pour le moment.</p>
         {% else %}
+        <form style="width: 100%; max-width: 98%;" method="post">
             <table class="table table-bordered">
                 <thead class="table-light">
                 <tr>
@@ -27,20 +51,43 @@
                     <th>Email</th>
                     <th>Role</th>
                     <th>Actif</th>
+                    <th>Modifier</th>
+                    <th>Désactiver</th>
+                    <th>Supprimer</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for participant in participants %}
                     <tr>
-                        <td>{{ participant.nom }}</td>
-                        <td>{{ participant.prenom }}</td>
-                        <td>{{ participant.mail }}</td>
-                        <td>{{ participant.administrateur ? 'Administrateur' : 'Utilisateur' }}</td>
-                        <td>{{ participant.actif ? 'Oui' : 'Non' }}</td>
+                        <td class="align-middle">{{ participant.nom }}</td>
+                        <td class="align-middle">{{ participant.prenom }}</td>
+                        <td class="align-middle">{{ participant.mail }}</td>
+                        <td class="align-middle">{{ participant.administrateur ? 'Administrateur' : 'Utilisateur' }}</td>
+                        <td class="align-middle">{{ participant.actif ? 'Oui' : 'Non' }}</td>
+                        <td class="align-middle text-center">
+                            <a href="{{ path('app_participants_edit', {id: participant.id}) }}" class="btn btn-secondary">Modifier</a>
+                        </td>
+                        <td class="align-middle align-middle text-center">
+                            <label>
+                                <input type="checkbox" name="selectedParticipant[]" value="{{ participant.id }}">
+                            </label>
+                        </td>
+                        <td class="align-middle">
+                            <form class="p-0 m-0 border-0" method="POST" action="{{ path('app_participants_list') }}">
+                                <input type="hidden" name="deleteParticipantId" value="{{ participant.id }}">
+                                <button type="submit" class="btn">Supprimer</button>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+
+            <div class="d-flex justify-content-between">
+                <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour</a>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
         {% endif %}
     </div>
 {% endblock %}

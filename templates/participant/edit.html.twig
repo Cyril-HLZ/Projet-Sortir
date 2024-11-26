@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un Participant{% endblock %}
+
+{% block body %}
+    <h1>Modifier un Participant</h1>
+
+    {{ form_start(form) }}
+
+    <div>
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom) }}
+        {{ form_errors(form.nom) }}
+    </div>
+
+    <div>
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom) }}
+        {{ form_errors(form.prenom) }}
+    </div>
+
+    <div>
+        {{ form_label(form.telephone) }}
+        {{ form_widget(form.telephone) }}
+        {{ form_errors(form.telephone) }}
+    </div>
+
+    <div>
+        {{ form_label(form.mail) }}
+        {{ form_widget(form.mail) }}
+        {{ form_errors(form.mail) }}
+    </div>
+
+    <div>
+        {{ form_label(form.campus) }}
+        {{ form_widget(form.campus) }}
+        {{ form_errors(form.campus) }}
+    </div>
+
+    <div>
+        {{ form_label(form.file) }}
+        {{ form_widget(form.file) }}
+        {{ form_errors(form.file) }}
+    </div>
+
+    <a href="{{ path('main_home') }}" class="btn btn-secondary">Retour</a>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+
+    {{ form_end(form) }}
+{% endblock %}
