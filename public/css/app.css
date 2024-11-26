@@ -77,3 +77,35 @@ button.btn {
     display: block;
     margin: 1rem auto;
 }
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background-color: #4993de; /* Azul sutil */
+    color: white;
+    text-align: left;
+    padding: 10px;
+}
+
+td {
+    background-color: #f7f7f7; /* Cinza claro */
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+tr:nth-child(even) td {
+    background-color: #ececec; /* Cinza alternado */
+}
+
+tr:hover td {
+    background-color: #d9eaff; /* Azul claro no hover */
+}
+
+.text-center {
+    text-align: center;
+}

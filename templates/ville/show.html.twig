@@ -3,10 +3,28 @@
 {% block title %}Ville index{% endblock %}
 
 {% block body %}
-    <h1>Ville index</h1>
-    {% for ville in villes %}
-        {{ ville.codePostal }}
-        {{ ville.nom }}
-    {% endfor %}
+    <div class="container">
+        <h1>Ville index</h1>
 
+        <table>
+            <thead>
+            <tr>
+                <th>Code Postal</th>
+                <th>Nom</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ville in villes %}
+                <tr>
+                    <td>{{ ville.codePostal }}</td>
+                    <td>{{ ville.nom }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2" class="text-center">Aucune ville trouvée.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
