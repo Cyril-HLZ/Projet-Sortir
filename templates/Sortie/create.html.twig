@@ -4,60 +4,62 @@
 
 {% block body %}
     <div class="container-fluid d-flex justify-content-center">
-        {{ form_start(form) }}
-        <h1 class="h1 text-center">Créer une nouvelle sortie</h1>
-
-        <div class="row align-items-end">
-            <div class="col-6">
-                {{ form_row(form.nom) }}
-                {{ form_row(form.dateHeureDebut) }}
-                {{ form_row(form.dateLimiteInscription) }}
-            </div>
-            <div class="col-6">
-                <div class="form-group mb-3">
-                    <label for="campus" class="form-label">Campus : </label>
-                    <input id="campus" class="form-control" readonly value="{{ app.user.campus.nom }}">
+        <div class="row g-4 col-10 m-4">
+            {{ form_start(form) }}
+            <h1 class="h1 text-center">Créer une nouvelle sortie</h1>
+            <div class="row g-4">
+                <div class="col-6">
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.dateHeureDebut) }}
+                    {{ form_row(form.dateLimiteInscription) }}
                 </div>
-                <div class="form-group mb-3">
-                    <label for="villes" class="form-label">Ville :</label>
-                    <select name="villes" id="villes" class="form-control">
-                        <option value="">Sélectionner une ville</option>
-                        {% for ville in villes %}
-                            <option value="{{ ville.id }}">{{ ville.nom }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="col-6">
+                    <div class="form-group mb-3">
+                        <label for="campus" class="form-label">Campus : </label>
+                        <input id="campus" class="form-control" readonly value="{{ app.user.campus.nom }}">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="villes" class="form-label">Ville :</label>
+                        <select name="villes" id="villes" class="form-control">
+                            <option value="">Sélectionner une ville</option>
+                            {% for ville in villes %}
+                                <option value="{{ ville.id }}">{{ ville.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="lieu" class="form-label">Lieu :</label>
+                        <select name="lieu" id="lieu" class="form-control">
+                            <option value="">Sélectionner un lieu</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="lieu" class="form-label">Lieu :</label>
-                    <select name="lieu" id="lieu" class="form-control">
-                        <option value="">Sélectionner un lieu</option>
-                    </select>
+            </div>
+
+            <div class="row align-items-end">
+                <div class="col-6">
+                    {{ form_row(form.nbInscriptionsMax) }}
+                    {{ form_row(form.duree) }}
+                </div>
+                <div class="col-6" id="lieu-details-container">
+                    <!-- lieu details will be inserted here by JavaScript -->
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(form.InfosSortie) }}
+                </div>
+            </div>
+
+            <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+                <button type="submit" name="action" value="enregistrer" class="btn btn-primary flex-fill">Enregistrer</button>
+                <button type="submit" name="action" value="publier" class="btn btn-success flex-fill">Publier la sortie</button>
+                <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Annuler</a>
+            </div>
+            {{ form_end(form) }}
         </div>
 
-        <div class="row align-items-end">
-            <div class="col-6">
-                {{ form_row(form.nbInscriptionsMax) }}
-                {{ form_row(form.duree) }}
-            </div>
-            <div class="col-6" id="lieu-details-container">
-                <!-- lieu details will be inserted here by JavaScript -->
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                {{ form_row(form.InfosSortie) }}
-            </div>
-        </div>
-
-        <div class="col-12 d-flex justify-content-center align-items-center gap-2">
-            <button type="submit" name="action" value="enregistrer" class="btn btn-primary flex-fill">Enregistrer</button>
-            <button type="submit" name="action" value="publier" class="btn btn-success flex-fill">Publier la sortie</button>
-            <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Annuler</a>
-        </div>
-        {{ form_end(form) }}
     </div>
 {% endblock %}
 

@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container-fluid d-flex justify-content-center">
-        <form class="row g-4 m-4">
+        <form class="row g-4 m-4 col-10">
             <h1 class="h1 text-center">Détails de la sortie</h1>
             <div class="col-md-6">
                 <label for="nom" class="form-label">Nom de la sortie : </label>
@@ -62,7 +62,7 @@
         </form>
     </div>
     <div class="container-fluid d-flex justify-content-center">
-        <div class="col-4">
+        <div class="col-8">
             <table class="table">
                 <thead>
                 <tr class="table-primary">
@@ -83,31 +83,39 @@
                 </tbody>
             </table>
         </div>
+
     </div>
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <div class="d-flex justify-content-center align-items-center gap-2">
-            <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Retour à la liste</a>
-            {% if app.user == sortie.organisateur and sortie.etat.libelle != 'Annulée' %}
-                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}" class="btn btn-primary flex-fill">Modifier</a>
-                <form method="post" action="{{ path('app_sortie_delete', {'id': sortie.id}) }}"
-                      class="d-inline m-0 p-0 border-0 flex-fill"
-                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?')">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
-                    <button class="btn btn-danger w-100">Supprimer</button>
-                </form>
-            {% endif %}
-            {% if app.user not in sortie.participants and sortie.etat.libelle == 'Ouverte' and sortie.participants|length < sortie.nbInscriptionsMax %}
-                <form class="d-inline m-0 p-0 border-0 flex-fill" method="post"
-                      action="{{ path('app_inscription_sortie', {'id': sortie.id}) }}"
-                      onsubmit="return confirm('Vous inscrire à cette sortie ?')">
-                    <input type="hidden" name="_method" value="POST">
-                    <button class="btn btn-success w-100">S'inscrire</button>
-                </form>
-            {% endif %}
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="row g-4 col-10">
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Retour à la liste</a>
+
+                {% if app.user == sortie.organisateur or is_granted('ROLE_ADMIN') and sortie.etat.libelle != 'Annulée'%}
+                    <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}" class="btn btn-primary flex-fill">Modifier
+                    </a>
+                    <form method="post" action="{{ path('app_sortie_delete', {'id': sortie.id}) }}"
+                          class="flex-fill m-0 p-0 border-0">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
+                        <button class="btn btn-danger w-100">Supprimer</button>
+                    </form>
+                {% endif %}
+
+                {% if app.user not in sortie.participants and sortie.etat.libelle == 'Ouverte' and sortie.participants|length < sortie.nbInscriptionsMax %}
+                    <form method="post" action="{{ path('app_inscription_sortie', {'id': sortie.id}) }}"
+                          class="flex-fill m-0 p-0 border-0">
+                        <input type="hidden" name="_method" value="POST">
+                        <button class="btn btn-success w-100">S'inscrire</button>
+                    </form>
+                {% endif %}
+
+                {% if app.user in sortie.participants and sortie.etat.libelle != 'Annulée' and sortie.etat.libelle != 'Passée' and app.user != sortie.organisateur %}
+                    <form method="post" action="{{ path('app_desistement', {'id': sortie.id}) }}"
+                          class="flex-fill m-0 p-0 border-0">
+                        <button type="submit" class="btn btn-danger w-100">Se désister</button>
+                    </form>
+                {% endif %}
+            </div>
         </div>
     </div>
-
-
 
 {% endblock %}

@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Edit Sortie{% endblock %}
@@ -55,14 +57,17 @@
 
         <div class="col-12 d-flex justify-content-center align-items-center gap-2">
             <button type="submit" class="btn btn-primary flex-fill">Enregistrer</button>
-            <a href="{{ path('app_annuler_sortie', {'id': sortie.id}) }}" class="btn btn-danger flex-fill">Annuler la
-                sortie</a>
+            {% if sortie.etat.libelle == 'Créer' %}
+            <button type="submit" name="action" value="publier" class="btn btn-success flex-fill">Publier</button>
+            {% endif %}
+            <a href="{{ path('app_annuler_sortie', {'id': sortie.id}) }}" class="btn btn-danger flex-fill">Annuler la sortie</a>
             <a href="{{ path('main_home') }}" class="btn btn-secondary flex-fill">Retour</a>
         </div>
+
         {{ form_end(form) }}
     </div>
-
 {% endblock %}
+
 
 
 
