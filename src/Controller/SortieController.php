@@ -70,7 +70,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/desistement', name: 'app_desistement', methods: ['POST'])]
+    #[Route('/{id}/desistement', name: 'app_desistement', requirements: ['id'=>'\d+'], methods: ['POST'])]
     public function seDesister(Sortie $sortie): Response
     {
         $user = $this->getUser();
@@ -92,7 +92,7 @@ final class SortieController extends AbstractController
         return $this->redirectToRoute('main_home');
     }
 
-    #[Route('/{id}/inscriptionSortie', name: 'app_inscription_sortie', methods: ['POST'])]
+    #[Route('/{id}/inscriptionSortie', name: 'app_inscription_sortie', requirements: ['id'=>'\d+'], methods: ['POST'])]
     public function inscriptionSortie(Sortie $sortie): Response
     {
         $user = $this->getUser();
@@ -114,7 +114,7 @@ final class SortieController extends AbstractController
         return $this->redirectToRoute('main_home');
     }
 
-    #[Route('/{id}/annulerSortie', name: 'app_annuler_sortie', methods: ['GET', 'POST'])]
+    #[Route('/{id}/annulerSortie', name: 'app_annuler_sortie', requirements: ['id'=>'\d+'], methods: ['GET', 'POST'])]
     public function annulerSortie(Sortie $sortie, Request $request): Response
     {
         $user = $this->getUser();
@@ -142,7 +142,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_sortie_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_sortie_edit', requirements: ['id'=>'\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Sortie $sortie): Response
     {
         $user = $this->getUser();

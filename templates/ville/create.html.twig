@@ -3,10 +3,30 @@
 {% block title %}Ville index{% endblock %}
 
 {% block body %}
-    <h1>Ville index</h1>
 
  {{ form_start(villeForm) }}
+    <h1 class="h1 text-center">Créer une ville</h1>
  {{ form_widget(villeForm) }}
-    <button type="submit">Creer nouvelle ville </button>
+    <button type="submit" class="btn btn-primary w-100 mt-5">Créer nouvelle ville </button>
+    <h3 class="h3 text-center">Toutes les villes</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">Ville</th>
+            <th scope="col">Code Postal</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ville in villes %}
+            <tr class="align-self">
+                <td class="align-middle">{{ ville.nom }}</td>
+                <td class="align-middle">{{ ville.codePostal }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
  {{ form_end(villeForm) }}
+
+
+
 {% endblock %}

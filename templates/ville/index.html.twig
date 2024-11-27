@@ -42,5 +42,9 @@
             {% endfor %}
             </tbody>
         </table>
+        <div class="d-flex gap-2">
+            <a href="{{ path('main_home') }}" class="btn btn-secondary w-100 flex-fill mt-5">Retour à l'acceuil</a>
+            <a href="{{ path('ville_create') }}" class="btn btn-success w-100 flex-fill mt-5">Créer une nouvelle ville</a>
+        </div>
     </div>
 {% endblock %}

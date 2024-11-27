@@ -128,7 +128,7 @@ class ListeController extends AbstractController
         ]);
     }
 
-    #[Route('/participant/edit/{id}', name: 'app_participants_edit', methods: ['GET','POST'])]
+    #[Route('/participant/edit/{id}', name: 'app_participants_edit', requirements: ['id'=>'\d+'], methods: ['GET','POST'])]
     public function editParticipant(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $participant = $entityManager->getRepository(Participant::class)->find($id);

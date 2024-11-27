@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/ville')]
+
 final class VilleController extends AbstractController
 {
     #[Route('/', name: 'ville_list', methods: ['GET'])]
@@ -25,8 +26,9 @@ final class VilleController extends AbstractController
     }
 
     #[Route('/create', name: 'ville_create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, VilleRepository $villeRepository): Response
     {
+        $villes = $villeRepository->findAll();
         $ville = new Ville();
         $villeform = $this->createForm(VilleFormType::class, $ville);
         $villeform->handleRequest($request);
@@ -36,7 +38,7 @@ final class VilleController extends AbstractController
             $entityManager->persist($ville);
             $entityManager->flush();
 
-            $this->addFlash("success", "Le cours a bien été enregistré");
+            $this->addFlash("success", "La ville à bien été enregistré");
 
             return $this->redirectToRoute('main_home');
         }
@@ -44,10 +46,11 @@ final class VilleController extends AbstractController
         return $this->render('ville/create.html.twig', [
             "villeForm" => $villeform,
             'ville' => $ville,
+            'villes' => $villes,
         ]);
     }
 
-    #[Route('/{id}/show', name: 'app_ville_show', methods: ['GET'])]
+    #[Route('/{id}/show', name: 'app_ville_show', requirements: ['id'=>'\d+'], methods: ['GET'])]
     public function show(Ville $ville): Response
     {
         $lieux = $ville->getLieux();
@@ -57,7 +60,7 @@ final class VilleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_ville_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_ville_edit', requirements: ['id'=>'\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Ville $ville, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(VilleFormType::class, $ville);
@@ -75,17 +78,17 @@ final class VilleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'app_ville_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_ville_delete', requirements: ['id'=>'\d+'], methods: ['POST'])]
     public function delete(Request $request, Ville $ville, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ville->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $ville->getId(), $request->getPayload()->getString('_token'))) {
             try {
-            $entityManager->remove($ville);
-            $entityManager->flush();
-            $this->addFlash('success','La ville à été supprimer');
+                $entityManager->remove($ville);
+                $entityManager->flush();
+                $this->addFlash('success', 'La ville à été supprimer');
 
-            }catch (\Exception $e){
-                $this->addFlash('danger','Une erreur est survenue lors de la suppression. Veuillez supprimer le(s) lieu(x) associé(s)');
+            } catch (\Exception $e) {
+                $this->addFlash('danger', 'Une erreur est survenue lors de la suppression. Veuillez supprimer le(s) lieu(x) associé(s)');
             }
         }
 

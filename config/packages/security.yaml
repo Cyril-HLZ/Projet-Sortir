@@ -35,6 +35,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN } #Accès pour les administrateurs
+         - { path: ^/ville, roles: ROLE_ADMIN } #Accès pour les administrateurs
+         - { path: ^/lieu, roles: ROLE_ADMIN } #Accès pour les administrateurs
          - { path: ^/inscription, roles: ROLE_USER} #Accès public
         # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY } #Accès public
          - { path: ^/home, roles: ROLE_USER} #Accès pour les utilisateurs connectés

@@ -37,7 +37,7 @@ class LieuController extends AbstractController
             'formLieu' => $formLieu->createView(),
         ]);
     }
-        #[Route('/{id}/delete', name: 'app_lieu_delete', methods: ['POST'])]
+        #[Route('/{id}/delete', name: 'app_lieu_delete', requirements: ['id'=>'\d+'], methods: ['POST'])]
         public function delete(Request $request, Lieu $lieu, EntityManagerInterface $entityManager): Response
         {
             if ($this->isCsrfTokenValid('delete'.$lieu->getId(), $request->getPayload()->getString('_token'))) {
