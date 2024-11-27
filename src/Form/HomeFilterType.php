@@ -17,40 +17,110 @@ class HomeFilterType extends AbstractType
     {
         $builder
             ->add('campus', EntityType::class, [
+                'label' => 'Campus : ',
                 'class' => Campus::class,
                 'choice_label' => 'nom',
                 'placeholder' => 'Tous les campus',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'label_attr' => [
+                    'class' => 'form-label'
+                ]
             ])
             ->add('search', SearchType::class, [
                 'label' => 'Le nom de la sortie contient : ',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Rechercher...'
+                ],
+                'label_attr' => [
+                    'class' => 'form-label'
+                ]
             ])
             ->add('dateMin', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Entre'
+                'label' => 'Entre le :',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'label_attr' => [
+                    'class' => 'form-label'
+                ]
             ])
             ->add('dateMax', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'et'
+                'label' => 'Et le : ',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'label_attr' => [
+                    'class' => 'form-label'
+                ]
             ])
             ->add('isOrganizer', CheckboxType::class, [
                 'label' => 'Sorties dont je suis l\'organisateur/trice',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'style' => 'cursor: pointer;'
+                ],
+                'label_attr' => [
+                    'class' => 'form-check-label custom-control-label',
+                    'style' => 'cursor: pointer;'
+                ],
+                'row_attr' => [
+                    'class' => 'form-check custom-checkbox'
+                ]
             ])
             ->add('isRegistered', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je suis inscrit/e',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'style' => 'cursor: pointer;'
+                ],
+                'label_attr' => [
+                    'class' => 'form-check-label custom-control-label',
+                    'style' => 'cursor: pointer;'
+                ],
+                'row_attr' => [
+                    'class' => 'form-check custom-checkbox'
+                ]
             ])
             ->add('isNotRegistered', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'style' => 'cursor: pointer;'
+                ],
+                'label_attr' => [
+                    'class' => 'form-check-label custom-control-label',
+                    'style' => 'cursor: pointer;'
+                ],
+                'row_attr' => [
+                    'class' => 'form-check custom-checkbox'
+                ]
             ])
             ->add('isPast', CheckboxType::class, [
                 'label' => 'Sorties passées',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-check-input',
+                    'style' => 'cursor: pointer;'
+                ],
+                'label_attr' => [
+                    'class' => 'form-check-label custom-control-label',
+                    'style' => 'cursor: pointer;'
+                ],
+                'row_attr' => [
+                    'class' => 'form-check custom-checkbox'
+                ]
             ])
         ;
     }

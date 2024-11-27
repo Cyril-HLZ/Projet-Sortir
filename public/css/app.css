@@ -1,13 +1,10 @@
-body {
-    background-color: white;
-}
 
 * {
-    font-family: Poppins, serif;
+    font-family: Poppins, sans-serif;
 }
 
 form {
-    max-width: 500px;
+    max-width: 90rem;
     margin: 2rem auto;
     padding: 1.5rem;
     border-radius: 0.5rem;
@@ -58,7 +55,7 @@ form + .sorties-list {
 form {
     margin: 2rem auto;
     padding: 2rem;
-    max-width: 600px;
+    max-width: 90rem;
     border-radius: 0.5rem;
     background-color: #f8f9fa;
     border: 1px solid #ddd;

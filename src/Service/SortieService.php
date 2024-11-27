@@ -154,11 +154,20 @@ class SortieService
         return true;
     }
 
-    private function peutAnnuler(Sortie $sortie, Participant $organisateur, array &$errors): bool
+    private function peutAnnuler(Sortie $sortie, Participant $participant, array &$errors): bool
     {
         $now = new \DateTime();
 
-        if ($sortie->getOrganisateur() !== $organisateur) {
+        if (in_array('ROLE_ADMIN', $participant->getRoles())) {
+            if ($sortie->getDateHeureDebut() <= $now) {
+                $errors[] = "La sortie a déjà commencé";
+                return false;
+            }
+            return true;
+        }
+
+
+        if ($sortie->getOrganisateur() !== $participant) {
             $errors[] = "Vous n'êtes pas l'organisateur de cette sortie";
             return false;
         }
@@ -223,8 +232,11 @@ class SortieService
 
     public function modifier(Sortie $sortie, Participant $participant, Request $request): array
     {
-        if ($sortie->getOrganisateur() !== $participant) {
+        if ($sortie->getOrganisateur() !== $participant && !in_array('ROLE_ADMIN', $participant->getRoles())) {
             return ['Vous ne pouvez pas modifier cette sortie'];
+        }
+        if ($sortie->getEtat()->getLibelle() === 'Annulée') {
+            return ['Impossible de modifier une sortie annulée'];
         }
 
         $errors = $this->verifierDates($sortie);
@@ -245,6 +257,29 @@ class SortieService
         return [];
     }
 
+    public function publier(Sortie $sortie, Participant $participant, Request $request): array
+    {
+        $errors = $this->modifier($sortie, $participant, $request);
+        if (!empty($errors)) {
+            return $errors;
+        }
+
+        if ($sortie->getEtat()->getLibelle() !== 'Créer') {
+            return ['La sortie doit être en état "Creer" pour être publiée'];
+        }
+
+        $etatOuvert = $this->etatRepository->findOneBy(['libelle' => 'Ouverte']);
+        if (!$etatOuvert) {
+            return ['État Ouverte non trouvé'];
+        }
+
+        $sortie->setEtat($etatOuvert);
+        $this->entityManager->flush();
+
+        return [];
+    }
+
+
     public function getLieuxVille(int $villeId): array
     {
         $lieux = $this->lieuRepository->findBy(['ville' => $villeId]);
@@ -264,8 +299,12 @@ class SortieService
 
     public function supprimer(Sortie $sortie, Participant $participant): array
     {
-        if ($sortie->getOrganisateur() !== $participant) {
+        if ($sortie->getOrganisateur() !== $participant && !in_array('ROLE_ADMIN', $participant->getRoles())) {
             return ['Vous n\'êtes pas l\'organisateur de cette sortie'];
+        }
+
+        if ($sortie->getEtat()->getLibelle() === 'Annulée') {
+            return ['Impossible de supprimer une sortie annulée'];
         }
 
         if ($sortie->getEtat()->getLibelle() === 'Activité en cours' ||

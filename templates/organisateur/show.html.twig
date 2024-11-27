@@ -4,27 +4,27 @@
 
 {% block body %}
 
-<div class="container-fluid d-flex justify-content-center">
-    <form class="form-group">
-    <h1 class="h1 text-center">Profil Organisateur</h1>
-        <div class="col-md-12">
-            <label for="nom" class="form-label">Nom :</label>
-            <input type="text" id="nom" class="form-control" value="{{ organisateur.nom }}" readonly>
+<div class="container-fluid d-flex justify-content-center ">
+        <form class="row g-4 m-4 col-10">
+            <h1 class="h1 text-center">Profil de {{ organisateur.prenom}} {{ organisateur.nom }}</h1>
+            <div class="col-md-12">
+                <label for="nom" class="form-label">Nom :</label>
+                <input type="text" id="nom" class="form-control" value="{{ organisateur.nom }}" readonly>
 
-            <label for="prenom" class="form-label">Prénom :</label>
-            <input type="text" id="prenom" class="form-control" value="{{ organisateur.prenom }}" readonly>
+                <label for="prenom" class="form-label">Prénom :</label>
+                <input type="text" id="prenom" class="form-control" value="{{ organisateur.prenom }}" readonly>
 
-            <label for="telephone" class="form-label">Telephone :</label>
-            <input type="text" id="telephone" class="form-control" value="{{ organisateur.telephone }}" readonly>
+                <label for="telephone" class="form-label">Telephone :</label>
+                <input type="text" id="telephone" class="form-control" value="{{ organisateur.telephone }}" readonly>
 
-            <label for="mail" class="form-label">Mail :</label>
-            <input type="text" id="mail" class="form-control" value="{{ organisateur.mail }}" readonly>
+                <label for="mail" class="form-label">Mail :</label>
+                <input type="text" id="mail" class="form-control" value="{{ organisateur.mail }}" readonly>
 
-            <label for="campus" class="form-label">Campus :</label>
-            <input type="text" id="campus" class="form-control" value="{{ organisateur.campus.nom }}" readonly>
-        </div>
+                <label for="campus" class="form-label">Campus :</label>
+                <input type="text" id="campus" class="form-control" value="{{ organisateur.campus.nom }}" readonly>
+            </div>
 
-        <!--
+            <!--
         <div class="form-group">
             <label for="photo" class="form-label">Photo de profil :</label>
             {# if participant.photo #}
@@ -33,6 +33,8 @@
                 <p class="text-muted">Pas de photo disponible pour ce participant.</p>
         </div>
         -->
-    </form>
+        </form>
+
+
 </div>
 {% endblock %}

@@ -54,6 +54,9 @@ class SortieRepository extends ServiceEntityRepository
 
         if (!empty($criteria['isNotRegistered'])) {
             $qb->andWhere(':user NOT MEMBER OF s.participants')
+                ->join('s.etat','e')
+                ->andWhere('e.libelle = :etatOuvert')
+                ->setParameter('etatOuvert', 'Ouverte')
                 ->setParameter('user', $user);
         }
 

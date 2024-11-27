@@ -3,94 +3,96 @@
 
 
 {% block body %}
-
-    {{ form_start(filterForm, {'attr': {'class': 'w-100 m-2', 'style': 'max-width: 100% !important;'}}) }}
-    <h1 class="h1 text-center">Filtrer les sorties</h1>
-    <div class="row align-items-end">
-        {% for field in filterForm|slice(0, 2) %}
-            <div class="col-6">
-                {{ form_row(field) }}
-            </div>
-        {% endfor %}
-    </div>
-    <div class="row g-3 align-items-end">
-        {% for field in filterForm|slice(2, 2) %}
-            <div class="col-6">
-                {{ form_row(field) }}
-            </div>
-        {% endfor %}
-    </div>
-    <div class="row d-flex align-item-center align-content-center justify-between">
-        {% for field in filterForm|slice(4) %}
-            <div class="col-md-3">
-                {{ form_row(field) }}
-            </div>
-        {% endfor %}
-        <div class="d-flex justify-content-center align-items-center gap-2">
-            <div class="col-6 d-flex justify-content-center align-items-center gap-2">
-                <button class="btn btn-secondary flex-fill">Rechercher</button>
-                <a href="{{ path('app_sortie_create') }}" class="btn btn-primary flex-fill">Créer une sortie</a>
+    <div class="container-fluid d-flex justify-content-center">
+        {{ form_start(filterForm, {'attr': {'class': 'w-100 m-2', 'style': 'max-width: 100% !important;'}}) }}
+        <h1 class="text-center">Filtrer les sorties</h1>
+        <div class="row align-items-end">
+            {% for field in filterForm|slice(0, 2) %}
+                <div class="col-6">
+                    {{ form_row(field) }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row g-3 align-items-end">
+            {% for field in filterForm|slice(2, 2) %}
+                <div class="col-6">
+                    {{ form_row(field) }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row d-flex align-item-center align-content-center justify-between">
+            {% for field in filterForm|slice(4) %}
+                <div class="col-md-3">
+                    {{ form_row(field) }}
+                </div>
+            {% endfor %}
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <div class="d-flex justify-content-center align-items-center gap-2 col-12">
+                    <button class="btn btn-secondary flex-fill w-100">Rechercher</button>
+                    <a href="{{ path('app_sortie_create') }}" class="btn btn-primary flex-fill w-100">Créer une sortie</a>
+                </div>
             </div>
         </div>
     </div>
-    {{ form_end(filterForm) }}
-    <div class="table-responsive mt-3">
-        <table class="table table-striped">
-            <thead>
-            <tr class="table-primary">
-                <th scope="col">Nom de la sortie</th>
-                <th scope="col">Date de la sortie</th>
-                <th scope="col">Clotûre</th>
-                <th scope="col">Inscrits/places</th>
-                <th scope="col">Etat</th>
-                <th scope="col">Inscrits</th>
-                <th scope="col">Organisateur</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for sortie in sorties %}
-                <tr class="align-self">
-                    <th scope="row" class="align-middle">{{ sortie.nom }}</th>
-                    <td class="align-middle">{{ sortie.dateHeureDebut|format_datetime('long', 'short', locale='fr') }}</td>
-                    <td class="align-middle">{{ sortie.dateLimiteInscription|format_datetime('long', 'short', locale='fr') }}</td>
-                    <td class="align-middle">{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
-                    <td class="align-middle">{{ sortie.etat.libelle }}</td>
-                    <td class="align-middle">{% if app.user in sortie.participants %}X{% endif %}</td>
-                    <td class="align-middle">
-                        <a href="{{ path('app_organisateur_show', {'id': sortie.organisateur.id}) }}"
-                           class="link text-dark">
-                            {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</a>
-                    </td>
-                    <td class="align-middle">
-                        <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}"
-                           class="btn btn-block btn-outline-primary w-100">Afficher</a>
-                        {% if app.user not in sortie.participants and sortie.etat.libelle == 'Ouverte'
-                            and sortie.participants|length < sortie.nbInscriptionsMax %}
-                            <form method="post" action="{{ path('app_inscription_sortie',{'id': sortie.id}) }}"
-                                  class="d-inline m-0 p-0 border-0">
-                                <button type="submit" class="btn btn-block btn-outline-success m-0 w-100">S'inscrire
-                                </button>
-                            </form>
-                        {% endif %}
-                        {% if app.user in sortie.participants and sortie.etat.libelle != 'Annulée' and sortie.etat.libelle != 'Passée' and app.user != sortie.organisateur %}
-                            <form method="post" action="{{ path('app_desistement', {'id': sortie.id}) }}"
-                                  class="d-inline m-0 p-0 border-0">
-                                <button type="submit" class="btn btn-block btn-outline-danger m-0 w-100">Se désister
-                                </button>
-                            </form>
-                        {% endif %}
-                    </td>
+        {{ form_end(filterForm) }}
+        <div class="table-responsive mt-3">
+                <table class="table table-striped">
+                <thead>
+                <tr class="table-primary">
+                    <th scope="col">Nom de la sortie</th>
+                    <th scope="col">Date de la sortie</th>
+                    <th scope="col">Clotûre</th>
+                    <th scope="col">Inscrits/places</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col">Inscrits</th>
+                    <th scope="col">Organisateur</th>
+                    <th scope="col">Actions</th>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="8" class="text-center">Aucune sortie trouvée</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
+                </thead>
+                <tbody>
+                {% for sortie in sorties %}
+                    <tr class="align-self">
+                        <th scope="row" class="align-middle">{{ sortie.nom }}</th>
+                        <td class="align-middle">{{ sortie.dateHeureDebut|format_datetime('long', 'short', locale='fr') }}</td>
+                        <td class="align-middle">{{ sortie.dateLimiteInscription|format_datetime('long', 'short', locale='fr') }}</td>
+                        <td class="align-middle">{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
+                        <td class="align-middle">{{ sortie.etat.libelle }}</td>
+                        <td class="align-middle">{% if app.user in sortie.participants %}X{% endif %}</td>
+                        <td class="align-middle">
+                            <a href="{{ path('app_organisateur_show', {'id': sortie.organisateur.id}) }}"
+                               class="link text-dark">
+                                {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</a>
+                        </td>
+                        <td class="align-middle">
+                            <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}"
+                               class="btn btn-block btn-outline-primary w-100">Afficher</a>
+                            {% if app.user not in sortie.participants and sortie.etat.libelle == 'Ouverte'
+                                and sortie.participants|length < sortie.nbInscriptionsMax %}
+                                <form method="post" action="{{ path('app_inscription_sortie',{'id': sortie.id}) }}"
+                                      class="d-inline m-0 p-0 border-0">
+                                    <button type="submit" class="btn btn-block btn-outline-success m-0 w-100">S'inscrire
+                                    </button>
+                                </form>
+                            {% endif %}
+                            {% if app.user in sortie.participants and sortie.etat.libelle != 'Annulée' and sortie.etat.libelle != 'Passée' and app.user != sortie.organisateur %}
+                                <form method="post" action="{{ path('app_desistement', {'id': sortie.id}) }}"
+                                      class="d-inline m-0 p-0 border-0">
+                                    <button type="submit" class="btn btn-block btn-outline-danger m-0 w-100">Se désister
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">Aucune sortie trouvée</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 {% endblock %}
 
-{% block title %} ENI | Accueil {% endblock %}
+{% block title %}
+    ENI | Accueil
+{% endblock %}

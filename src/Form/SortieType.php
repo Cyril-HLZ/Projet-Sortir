@@ -37,7 +37,7 @@ class SortieType extends AbstractType
                     'type' => 'datetime',]
             ])
             ->add('dateLimiteInscription', DateType::class, [
-                'label' => 'Date limite d’inscription : ',
+                'label' => 'Date limite d\'inscription : ',
                 'widget' => 'single_text',
                 'attr' => ['class' => 'form-control']
             ])
@@ -47,7 +47,7 @@ class SortieType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
             ->add('duree', IntegerType::class, [
-                'label' => 'Durée : ',
+                'label' => 'Durée de l\'évenement : ',
                 'required' => true,
                 'attr' => ['class' => 'form-control']
             ]);

@@ -155,14 +155,24 @@ final class SortieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $errors = $this->sortieService->modifier($sortie, $user, $request);
-            if (empty($errors)) {
-                $this->addFlash('success', "La sortie a été mise à jour avec succès !");
-                return $this->redirectToRoute('main_home');
-            }
-
-            foreach ($errors as $error) {
-                $this->addFlash('danger', $error);
+            if ($request->request->get('action') === 'publier') {
+                $errors = $this->sortieService->publier($sortie, $user, $request);
+                if (empty($errors)) {
+                    $this->addFlash('success', "La sortie a été publiée avec succès !");
+                    return $this->redirectToRoute('main_home');
+                }
+                foreach ($errors as $error) {
+                    $this->addFlash('danger', $error);
+                }
+            } else {
+                $errors = $this->sortieService->modifier($sortie, $user, $request);
+                if (empty($errors)) {
+                    $this->addFlash('success', "La sortie a été mise à jour avec succès !");
+                    return $this->redirectToRoute('main_home');
+                }
+                foreach ($errors as $error) {
+                    $this->addFlash('danger', $error);
+                }
             }
         }
 
