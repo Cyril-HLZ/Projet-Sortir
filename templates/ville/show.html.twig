@@ -3,25 +3,37 @@
 {% block title %}Ville index{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Ville index</h1>
+    <div class="container-fluid col-10">
 
+        <h1 class="h1 text-center">{{ ville.nom }} {{ ville.codePostal }}</h1>
         <table>
             <thead>
             <tr>
-                <th>Code Postal</th>
                 <th>Nom</th>
+                <th>Adresse</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            {% for ville in villes %}
+            {% for lieu in lieux %}
                 <tr>
-                    <td>{{ ville.codePostal }}</td>
-                    <td>{{ ville.nom }}</td>
+                    <td>{{ lieu.nom }}</td>
+                    <td>{{ lieu.rue }}</td>
+
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form method="post" action="{{ path('app_lieu_delete',{'id': lieu.id}) }}"
+                                  class="m-0 p-0 border-0 w-100"
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce lieu ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lieu.id) }}">
+                                <button type="submit" class="btn btn-outline-danger w-100 m-0">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="2" class="text-center">Aucune ville trouvée.</td>
+                    <td colspan="3" class="text-center">Aucun lieu trouvée.</td>
                 </tr>
             {% endfor %}
             </tbody>

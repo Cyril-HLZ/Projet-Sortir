@@ -19,7 +19,7 @@ final class VilleController extends AbstractController
     {
         $villes = $villeRepository->findAll();
 
-        return $this->render('ville/show.html.twig', [
+        return $this->render('ville/index.html.twig', [
             'villes' => $villes,
         ]);
     }
@@ -36,22 +36,24 @@ final class VilleController extends AbstractController
             $entityManager->persist($ville);
             $entityManager->flush();
 
-            $this->addFlash("sucess", "Le cours a bien été enregistré");
+            $this->addFlash("success", "Le cours a bien été enregistré");
 
             return $this->redirectToRoute('main_home');
         }
 
-        return $this->render('ville/index.html.twig', [
+        return $this->render('ville/create.html.twig', [
             "villeForm" => $villeform,
             'ville' => $ville,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ville_show', methods: ['GET'])]
+    #[Route('/{id}/show', name: 'app_ville_show', methods: ['GET'])]
     public function show(Ville $ville): Response
     {
+        $lieux = $ville->getLieux();
         return $this->render('ville/show.html.twig', [
             'ville' => $ville,
+            'lieux' => $lieux,
         ]);
     }
 
@@ -73,14 +75,20 @@ final class VilleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ville_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_ville_delete', methods: ['POST'])]
     public function delete(Request $request, Ville $ville, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ville->getId(), $request->getPayload()->getString('_token'))) {
+            try {
             $entityManager->remove($ville);
             $entityManager->flush();
+            $this->addFlash('success','La ville à été supprimer');
+
+            }catch (\Exception $e){
+                $this->addFlash('danger','Une erreur est survenue lors de la suppression. Veuillez supprimer le(s) lieu(x) associé(s)');
+            }
         }
 
-        return $this->redirectToRoute('app_ville_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('ville_list', [], Response::HTTP_SEE_OTHER);
     }
 }
