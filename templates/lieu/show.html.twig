@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LieuController!{% endblock %}
+
+{% block body %}
+    {{ form_start(formLieu) }}
+    <h1 class="h1 text-center">Créer un nouveau lieu</h1>
+    {{ form_row(formLieu.nom) }}
+    {{ form_row(formLieu.rue) }}
+    {{ form_row(formLieu.ville) }}
+    {{ form_widget(formLieu) }}
+    <button type="submit" class="btn btn-primary w-100 flex-fill">Enregistrer</button>
+
+    <table class="table table-striped">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">Nom</th>
+            <th scope="col">Rue</th>
+            <th scope="col">Ville</th>
+            <th scope="col">Code Postal</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for lieu in lieux %}
+            <tr class="align-self">
+                <td class="align-middle">{{ lieu.nom }}</td>
+                <td class="align-middle">{{ lieu.rue }}</td>
+                <td class="align-middle">{{ lieu.ville.nom }}</td>
+                <td class="align-middle">{{ lieu.ville.codePostal }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ form_end(formLieu) }}
+
+{% endblock %}

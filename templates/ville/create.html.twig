@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ville index{% endblock %}
+
+{% block body %}
+    <h1>Ville index</h1>
+
+ {{ form_start(villeForm) }}
+ {{ form_widget(villeForm) }}
+    <button type="submit">Creer nouvelle ville </button>
+ {{ form_end(villeForm) }}
+{% endblock %}
